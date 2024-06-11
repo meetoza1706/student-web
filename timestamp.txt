@@ -1,0 +1,15 @@
+import datetime
+import time as tm
+import os
+
+while True:
+    current_time = datetime.datetime.now()
+
+    date = current_time.strftime("%d/%m/%y")
+
+    time = current_time.strftime("%H:%M:%S").lstrip("0")
+
+    os.system('cls')
+    print (f"Date: {date}")
+    print (f"Time: {time}")
+    tm.sleep(1)
