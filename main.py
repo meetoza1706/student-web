@@ -26,7 +26,7 @@ schedule = {
 
 @app.route('/')
 def home():
-    current_time = datetime.datetime(2024, 6, 16, 11, 51, 0)
+    current_time = datetime.datetime.now()
     
     weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     weekday_number = current_time.weekday()
