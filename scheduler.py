@@ -41,14 +41,29 @@ while True:
     if schedule_info:
         current_lecture = ""
         current_class = ""
+        current_start_time = ""
+        current_end_time = ""
+        timing = ""
         for i, time_slot in enumerate(schedule_info["time_slots"]):
             slot_time = datetime.datetime.strptime(time_slot, "%I:%M %p")
             slot_time = slot_time.replace(year=current_time.year, month=current_time.month, day=current_time.day)
             if current_time >= slot_time:
                 current_lecture = schedule_info["lectures"][i]
                 current_class = schedule_info["class_numbers"][i]
-        if current_lecture and current_lecture != "end of day": #most important thing
-            print(f"Currently ongoing lecture: {current_lecture}")
+                if i == 0:
+                    current_start_time = time_slot
+                else:
+                    current_start_time = schedule_info["time_slots"][i-1]
+                if i == len(schedule_info["time_slots"]) - 1:
+                    current_end_time = "End of day"
+                else:
+                    current_end_time = schedule_info["time_slots"][i]
+                if i == len(schedule_info["time_slots"]) - 1:
+                    timing = f"{current_start_time} - {current_end_time}"
+                else:
+                    timing = f"{current_start_time} - {schedule_info['time_slots'][i+1]}"
+        if current_lecture and current_lecture!= "end of day": 
+            print(f"Currently ongoing lecture: {current_lecture} ({timing})")
             print(f"Class: {current_class}")
         else:
             print("No lecture currently ongoing")
