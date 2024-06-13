@@ -87,6 +87,14 @@ def home():
 
     return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting)
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
 
