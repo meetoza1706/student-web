@@ -83,7 +83,7 @@ def home():
     elif 18 <= current_time.hour < 22:
         greeting = "Good Evening!"
     else:
-        greeting = "Good Night!"
+        greeting = "Good Evening!"
 
     return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting)
 
