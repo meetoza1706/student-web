@@ -1,7 +1,16 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
+from flask_mysqldb import MySQL
 import datetime
 
 app = Flask(__name__)
+
+# MySQL configurations
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = ''
+app.config['MYSQL_DB'] = 'studentweb'
+
+mysql = MySQL(app)
 
 schedule = {
     "Monday": {"time_slots": ["08:30 AM", "09:20 AM", "10:10 AM", "11:00 AM", "11:50 AM", "12:30 PM", "01:30 PM", "02:10 PM"],
@@ -91,9 +100,48 @@ def home():
 def login():
     return render_template('login.html')
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    msg = ''
+    if request.method == 'POST':
+        try:
+            username = request.form['username']
+            password = request.form['password']
+            confirm_password = request.form['confirm_password']
+            email = request.form['email']
+            f_name = request.form['f_name']
+            l_name = request.form['l_name']
+            
+            if not (username and password and confirm_password and email and f_name and l_name):
+                msg = 'Please fill out all the fields!'
+            elif password != confirm_password:
+                msg = 'Passwords do not match!'
+            else:
+                cursor = mysql.connection.cursor()
+                cursor.execute('SELECT * FROM user_data WHERE username = %s', (username,))
+                account = cursor.fetchone()
+                
+                if account:
+                    msg = 'Username already exists!'
+                else:
+                    cursor.execute('SELECT * FROM user_data WHERE email = %s', (email,))
+                    account = cursor.fetchone()
+                    if account:
+                        msg = 'Email already exists!'
+                    elif username == email:
+                        msg = 'Username cannot be the same as email!'
+                    else:
+                        cursor.execute('INSERT INTO user_data (username, password, email, f_name, l_name) VALUES (%s, %s, %s, %s, %s)',
+                                       (username, password, email, f_name, l_name))
+                        mysql.connection.commit()
+                        msg = 'You have successfully registered!'
+                        cursor.close()
+        
+        except Exception as e:
+            msg = 'Error occurred during registration: ' + str(e)
+    
+    return render_template('register.html', msg=msg)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
