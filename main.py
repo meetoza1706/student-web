@@ -1,8 +1,20 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request , session,  jsonify, redirect, url_for
 from flask_mysqldb import MySQL
 import datetime
+import random
+import os
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+import bcrypt
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
+
+OUTLOOK_SMTP_SERVER = 'smtp-mail.outlook.com'
+OUTLOOK_SMTP_PORT = 587
+OUTLOOK_EMAIL = 'studentweb24@hotmail.com'
+OUTLOOK_PASSWORD = 'Studentweb@2420'
 
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
@@ -96,23 +108,65 @@ def home():
 
     return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting)
 
-@app.route('/login')
-def login():
-    return render_template('login.html')
+def hash_password(password):
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_password
+
+def generate_otp():
+    return str(random.randint(100000, 999999))
+
+def send_email(email, otp):
+    msg = MIMEMultipart()
+    msg['From'] = OUTLOOK_EMAIL
+    msg['To'] = email
+    msg['Subject'] = 'Your OTP Code'
+    body = f'Your OTP code is {otp}'
+    msg.attach(MIMEText(body, 'plain'))
+
+    try:
+        print("Connecting to the SMTP server...")
+        server = smtplib.SMTP(OUTLOOK_SMTP_SERVER, OUTLOOK_SMTP_PORT)
+        server.starttls()
+        server.login(OUTLOOK_EMAIL, OUTLOOK_PASSWORD)
+        text = msg.as_string()
+        print(f"Sending email to {email}...")
+        server.sendmail(OUTLOOK_EMAIL, email, text)
+        server.quit()
+        print("Email sent successfully!")
+        return True
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        return False
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
     if request.method == 'POST':
+        if 'otp' in request.form:
+            otp = request.form['otp']
+            if otp == session.get('otp'):
+                user_data = session.get('user_data')
+                hashed_password = hash_password(user_data['password'])  # Hash the password
+                cursor = mysql.connection.cursor()
+                cursor.execute('INSERT INTO user_data (username, password, email) VALUES (%s, %s, %s)',
+                               (user_data['username'], hashed_password, user_data['email']))  # Store hashed password
+                mysql.connection.commit()
+                cursor.close()
+                session.pop('otp', None)
+                session.pop('user_data', None)
+                msg = 'You have successfully registered!'
+                return render_template('login.html', msg=msg)
+            else:
+                msg = 'Invalid OTP. Please try again.'
+                return render_template('register.html', msg=msg, otp_sent=True)
+
         try:
             username = request.form['username']
             password = request.form['password']
             confirm_password = request.form['confirm_password']
             email = request.form['email']
-            f_name = request.form['f_name']
-            l_name = request.form['l_name']
             
-            if not (username and password and confirm_password and email and f_name and l_name):
+            if not (username and password and confirm_password and email):
                 msg = 'Please fill out all the fields!'
             elif password != confirm_password:
                 msg = 'Passwords do not match!'
@@ -131,18 +185,28 @@ def register():
                     elif username == email:
                         msg = 'Username cannot be the same as email!'
                     else:
-                        cursor.execute('INSERT INTO user_data (username, password, email, f_name, l_name) VALUES (%s, %s, %s, %s, %s)',
-                                       (username, password, email, f_name, l_name))
-                        mysql.connection.commit()
-                        msg = 'You have successfully registered!'
-                        cursor.close()
-        
+                        otp = generate_otp()
+                        session['otp'] = otp
+                        session['user_data'] = {
+                            'username': username,
+                            'password': password,  # Store plain password temporarily for OTP verification
+                            'email': email
+                        }
+                        if send_email(email, otp):
+                            msg = 'OTP has been sent to your email. Please verify.'
+                            return render_template('register.html', msg=msg, otp_sent=True)
+                        else:
+                            msg = 'Failed to send OTP. Please try again.'
+
         except Exception as e:
             msg = 'Error occurred during registration: ' + str(e)
     
     return render_template('register.html', msg=msg)
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
-
