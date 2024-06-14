@@ -109,8 +109,9 @@ def home():
     else:
         greeting = "Good Evening!"
 
-    return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting)
-
+    username = session.get('username', 'guest')  # Get username from session or default to 'guest'
+    
+    return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username)
 def hash_password(password):
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     return hashed_password
@@ -227,7 +228,7 @@ def login():
             if bcrypt.check_password_hash(hashed_password, password):
                 session['logged_in'] = True
                 session['username'] = username_from_db
-                return redirect(url_for('dashboard'))
+                return redirect('/')
             else:
                 msg = 'Incorrect password. Please try again.'
         else:
