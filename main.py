@@ -272,6 +272,8 @@ def dashboard():
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot_password():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
     msg = ''
     if request.method == 'POST':
         email = request.form['email']
@@ -294,6 +296,8 @@ def forgot_password():
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
     msg = ''
     if request.method == 'POST':
         otp = request.form['otp']
@@ -363,7 +367,7 @@ def profile():
             db_password = cursor.fetchone()[0]
 
             if bcrypt.check_password_hash(db_password, current_password):
-                hashed_new_password = hash_password(new_password)  # Hash new password
+                hashed_new_password =   hash_password(new_password)  # Hash new password
                 cursor.execute('UPDATE user_data SET password = %s WHERE username = %s', (hashed_new_password, username))
                 mysql.connection.commit()
                 flash('Password updated successfully', 'success')
@@ -380,8 +384,87 @@ def profile():
     # Render the profile page with user data
     return render_template('profile.html', username=username, email=user_data[0], f_name=user_data[1], l_name=user_data[2], profile_photo=user_data[3])
 
+@app.route('/change_email', methods=['GET','POST'])
+def change_email():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
+    msg = ''
+    if request.method == 'POST':
+        email = request.form['email']
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM user_data WHERE email = %s', (email,))
+        account = cursor.fetchone()
+        if account:
+            otp = generate_otp()
+            session['reset_email'] = email
+            session['otp'] = otp
+            if send_email(email, otp):
+                msg = 'An OTP has been sent to your email. Please check and enter it below.'
+                return render_template('new_email.html', msg=msg)
+            else:
+                msg = 'Failed to send OTP. Please try again later.'
+        else:
+            msg = 'Email not found in our records. Please check and try again.'
+        cursor.close()
+    return render_template('change_email.html',msg=msg)
+
+@app.route('/new_email', methods=['GET', 'POST'])
+def new_email():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
+    msg = ''
+    
+    if request.method == 'POST':
+        new_email = request.form['new_email']
+        
+        # Check if the new email already exists
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM user_data WHERE email = %s', (new_email,))
+        account = cursor.fetchone()
+        
+        if account:
+            msg = 'Email already exists!'
+        else:
+            # Generate and send OTP to the new email
+            otp = generate_otp()
+            if send_email(new_email, otp):
+                session['otp'] = otp  # Store the OTP in the session
+                session['new_email'] = new_email  # Store the new email in the session
+                msg = 'OTP has been sent to your new email. Please verify.'
+                return render_template('verify_email.html', msg=msg)  # Redirect to OTP verification page
+            else:
+                msg = 'Failed to send OTP. Please try again.'
+    
+    return render_template('new_email.html', msg=msg)
 
 
+@app.route('/verify_email', methods=['GET', 'POST'])
+def verify_email():
+    if 'logged_in' not in session:
+       return redirect(url_for('login'))
+
+    username = session.get('username')
+    msg = ''
+    
+    if request.method == 'POST':
+        otp = request.form['otp']
+        
+        # Verify OTP
+        if otp == session.get('otp'):
+            new_email = session.get('new_email')
+            if new_email:
+                cursor = mysql.connection.cursor()
+                cursor.execute('UPDATE user_data SET email = %s WHERE username = %s', (new_email, username))
+                mysql.connection.commit()
+                cursor.close()
+                msg = 'Email has been changed.'
+                session.pop('otp', None)  # Clear the OTP from session
+                session.pop('new_email', None)  # Clear the new email from session
+                return redirect(url_for('profile'))
+        else:
+            msg = 'Invalid OTP. Please try again.'
+
+    return render_template('verify_email.html', msg=msg)
 
 if __name__ == '__main__':
     app.run(debug=True)

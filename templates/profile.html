@@ -73,7 +73,8 @@
                     <div class="w-1/2">
                         <div>
                             <label class="block mb-2 text-blue-500" for="email">Email</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="email" value="{{ email }}">
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="email" value="{{ email }}" disabled>
+                            <a href="/change_email"><i class="fa-solid fa-pen-to-square"></i></a>
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="f_name">First Name</label>
@@ -99,8 +100,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center items-center mt-5">
+                <div class="flex flex-col justify-center items-center mt-5">
                     <button class="w-[20%] bg-blue-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-6 rounded" type="submit">Submit Changes</button>
+                    <a class="text-blue-700 hover:text-pink-700 text-sm float-left" href="/">Back to home</a>
                 </div>
             </form>
         </div>
