@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, session, jsonify, redirect, url_for
+from flask import Flask, render_template, request, session, jsonify, redirect, url_for, flash
 from flask_mysqldb import MySQL
+from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
 import random
 import os
@@ -26,6 +27,14 @@ app.config['MYSQL_DB'] = 'studentweb'
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
+
+# Upload configuration
+UPLOAD_FOLDER = 'static/images/profile_uploads'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Schedule dictionary
 schedule = {
@@ -94,7 +103,6 @@ def get_current_lecture_and_class(schedule):
 
     return current_lecture, current_class, timing
 
-
 @app.route('/')
 def home():
     current_lecture, current_class, timing = get_current_lecture_and_class(schedule)
@@ -112,14 +120,21 @@ def home():
     username = session.get('username', 'guest')
     ausername = session.get('username')
     first_letter = username[0]
+
+    profile_photo = None
+    email = None
+
     if 'logged_in' in session:
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT email FROM user_data WHERE username = %s', (username,))
-        email = cursor.fetchone()[0]
-    else:
-        email = None
+        cursor.execute('SELECT email, profile_photo FROM user_data WHERE username = %s', (username,))
+        user_data = cursor.fetchone()
+        if user_data:
+            email = user_data[0]
+            profile_photo = user_data[1]
+        cursor.close()
 
-    return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email)
+    return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo)
+
 
 def hash_password(password):
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -310,20 +325,62 @@ def logout():
     session.pop('logged_in', None)
     return redirect(url_for('home'))
 
-@app.route('/profile')
+@app.route('/profile', methods=['GET', 'POST'])
 def profile():
-    if 'logged_in' in session:
-        username = session['username']
-        cursor = mysql.connection.cursor()
-        cursor.execute('SELECT email, f_name, l_name FROM user_data WHERE username = %s', (username,))
-        user_data = cursor.fetchone()
-        if user_data:
-            email, f_name, l_name = user_data
-            return render_template('profile.html', email=email, f_name=f_name, l_name=l_name)
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))  # Redirect to login page if not logged in
+
+    username = session['username']
+    cursor = mysql.connection.cursor()
+
+    if request.method == 'POST':
+        # Handle profile photo update
+        if 'profile_photo' in request.files:
+            profile_photo = request.files['profile_photo']
+            if profile_photo.filename != '':
+                filename = secure_filename(profile_photo.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                profile_photo.save(filepath)
+                
+                # Update profile photo in database
+                cursor.execute('UPDATE user_data SET profile_photo = %s WHERE username = %s', (filename, username))
+                mysql.connection.commit()
+
+        # Handle first name and last name update
+        f_name = request.form.get('f_name')
+        l_name = request.form.get('l_name')
+        if f_name and l_name:
+            cursor.execute('UPDATE user_data SET f_name = %s, l_name = %s WHERE username = %s', (f_name, l_name, username))
+            mysql.connection.commit()
+
+        # Handle password update
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_new_password = request.form.get('c_new_password')
+
+        if current_password and new_password and confirm_new_password:
+            cursor.execute('SELECT password FROM user_data WHERE username = %s', (username,))
+            db_password = cursor.fetchone()[0]
+
+            if bcrypt.check_password_hash(db_password, current_password):
+                hashed_new_password = hash_password(new_password)  # Hash new password
+                cursor.execute('UPDATE user_data SET password = %s WHERE username = %s', (hashed_new_password, username))
+                mysql.connection.commit()
+                flash('Password updated successfully', 'success')
+            else:
+                flash('Current password incorrect', 'error')
         else:
-            return "User not found", 404
-    else:
-        return redirect(url_for('login'))
+            flash('Please fill all password fields', 'error')
+
+    # Fetch user data for displaying in the form
+    cursor.execute('SELECT email, f_name, l_name, profile_photo FROM user_data WHERE username = %s', (username,))
+    user_data = cursor.fetchone()
+    cursor.close()
+
+    # Render the profile page with user data
+    return render_template('profile.html', username=username, email=user_data[0], f_name=user_data[1], l_name=user_data[2], profile_photo=user_data[3])
+
+
 
 
 if __name__ == '__main__':

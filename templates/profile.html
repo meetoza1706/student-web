@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudyMate</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="static/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .profile-placeholder {
+            background-color: gray;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+    </style>
+    <script>
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function() {
+                const output = document.getElementById('profilePhotoPreview');
+                const placeholder = document.getElementById('profilePhotoPlaceholder');
+                output.src = reader.result;
+                output.style.display = 'block';
+                if (placeholder) {
+                    placeholder.style.display = 'none';
+                }
+            }
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
 </head>
-
 <body class="bg-gray-100">
     <div class="area h-full">
         <ul class="circles h-full">
@@ -32,52 +56,55 @@
     </div>
     <div class="flex justify-center items-center h-screen">
         <div class="w-[80%] bg-blue-100 rounded p-5">
-            <div class="w-full flex justify-center items-center mb-4 gap-[2%]">
-                <img src="static/images/test.jpg" class="rounded-full h-48 w-48 object-cover" alt="">
-                <i class="fa-solid fa-pen-to-square"></i>
-            </div>
-            <div class="flex gap-20">
-                <div class="w-1/2">
-                    <div>
-                        <label class="block mb-2 text-blue-500" for="email">Email</label>
-                        <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="Email" value="{{ email }}" required>
+            <form method="POST" action="/profile" enctype="multipart/form-data">
+                <div class="w-full flex justify-center items-center mb-4 gap-[2%]">
+                    {% if profile_photo %}
+                        <img src="{{ url_for('static', filename='images/profile_uploads/' + profile_photo) }}" class="rounded-full h-48 w-48 object-cover" alt="Profile Photo" id="profilePhotoPreview">
+                    {% else %}
+                        <div class="rounded-full h-48 w-48 profile-placeholder" id="profilePhotoPlaceholder">{{ username[0] }}</div>
+                        <img id="profilePhotoPreview" class="rounded-full h-48 w-48 object-cover" style="display: none;">
+                    {% endif %}
+                    <label for="profile_photo" class="cursor-pointer">
                         <i class="fa-solid fa-pen-to-square"></i>
+                    </label>
+                    <input type="file" id="profile_photo" name="profile_photo" class="hidden" accept="image/*" onchange="previewImage(event)">
+                </div>
+                <div class="flex gap-20">
+                    <div class="w-1/2">
+                        <div>
+                            <label class="block mb-2 text-blue-500" for="email">Email</label>
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="email" value="{{ email }}">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-blue-500" for="f_name">First Name</label>
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="f_name" value="{{ f_name }}">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-blue-500" for="l_name">Last Name</label>
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="l_name" value="{{ l_name }}">
+                        </div>
                     </div>
-                    <div>
-                        <label class="block mb-2 text-blue-500" for="f_name">First Name</label>
-                        <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="f_name" value="{{ f_name }}" required>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-blue-500" for="l_name">Last Name</label>
-                        <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="l_name" value="{{ l_name }}" required>
-                        <i class="fa-solid fa-pen-to-square"></i>
+                    <div class="w-1/2">
+                        <div>
+                            <label class="block mb-2 text-blue-500" for="current_password">Current Password</label>
+                                <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" value="{{ current_password }}" name="current_password">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-blue-500" for="new_password">New Password</label>
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="new_password" value="{{ new_password }}">
+                        </div>
+                        <div>
+                            <label class="block mb-2 text-blue-500" for="c_new_password">Confirm New Password</label>
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="c_new_password" value="{{ c_new_password }}">
+                        </div>
                     </div>
                 </div>
-                <div class="w-1/2">
-                    <div>
-                        <label class="block mb-2 text-blue-500" for="current_password">Current Password</label>
-                        <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="current_password" required>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-blue-500" for="new_password">New Password</label>
-                        <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="new_password" required>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </div>
-                    <div>
-                        <label class="block mb-2 text-blue-500" for="c_new_password">Confirm New Password</label>
-                        <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="c_new_password" required>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                    </div>
+                <div class="flex justify-center items-center mt-5">
+                    <button class="w-[20%] bg-blue-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-6 rounded" type="submit">Submit Changes</button>
                 </div>
-            </div>
-            <div class="flex justify-center items-center mt-5">
-                <button class="w-[20%] bg-blue-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-6 rounded" type="submit">Submit Changes</button>
-            </div>  
+            </form>
         </div>
     </div>
     <script src="https://kit.fontawesome.com/a7ad42ee25.js" crossorigin="anonymous"></script>
 </body>
-
 </html>
