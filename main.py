@@ -134,7 +134,7 @@ def send_email(email, otp):
     msg['To'] = email
     msg['Subject'] = 'Your OTP Code'
     body = f'Your OTP code is {otp}'
-    msg.attach(MIMEText(body, 'plain'))
+    msg.attach(MIMEText(body, 'plain')) 
 
     try:
         print("Connecting to the SMTP server...")
@@ -312,7 +312,19 @@ def logout():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    if 'logged_in' in session:
+        username = session['username']
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT email, f_name, l_name FROM user_data WHERE username = %s', (username,))
+        user_data = cursor.fetchone()
+        if user_data:
+            email, f_name, l_name = user_data
+            return render_template('profile.html', email=email, f_name=f_name, l_name=l_name)
+        else:
+            return "User not found", 404
+    else:
+        return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
