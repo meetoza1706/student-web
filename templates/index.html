@@ -177,6 +177,55 @@
                 }, 5000); // Match the timeout duration with the animation duration
             }
         }
+        // Assuming you have a button with id="markAttendanceButton"
+        document.getElementById('presentButton').addEventListener('click', function() {
+            const presentButton = true;  // Boolean value to send
+            
+            fetch('/mark_attendance', {
+                method: 'POST',  // or 'GET' depending on your route
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    presentButton: presentButton,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from Flask route here
+                console.log('Success:', data);
+                // Disable the button after success
+                // Optionally, you can change text or style to indicate success
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        document.getElementById('leaveButton').addEventListener('click', function() {
+            const leaveButton = true;  // Boolean value to send
+            
+            fetch('/mark_attendance', {
+                method: 'POST',  // or 'GET' depending on your route
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    leaveButton: leaveButton,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from Flask route here
+                console.log('Success:', data);
+                // Disable the button after success
+                // Optionally, you can change text or style to indicate success
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
     </script>
 </body>
 </html>

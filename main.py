@@ -143,7 +143,18 @@ def home():
 
     return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo, schedule=schedule, now=now)
 
+@app.route('/mark_attendance', methods=['POST'])
+def mark_attendance():
+    data = request.get_json()
 
+    present_button = data.get('presentButton')
+    if present_button == True:
+        print("well done meet!")
+    
+    leaveButton = data.get('leaveButton')
+    if leaveButton == True:
+        print("leaving too soon?")
+    return jsonify({'message':'Data received successfully.'})
 
 def hash_password(password):
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
