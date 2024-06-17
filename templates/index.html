@@ -177,25 +177,29 @@
                 }, 5000); // Match the timeout duration with the animation duration
             }
         }
-        // Assuming you have a button with id="markAttendanceButton"
         document.getElementById('presentButton').addEventListener('click', function() {
-            const presentButton = true;  // Boolean value to send
-            
             fetch('/mark_attendance', {
-                method: 'POST',  // or 'GET' depending on your route
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    presentButton: presentButton,
+                    presentButton: true,
+                    leaveButton: false
                 }),
             })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from Flask route here
-                console.log('Success:', data);
-                // Disable the button after success
-                // Optionally, you can change text or style to indicate success
+            .then(response => response.json().then(data => ({status: response.status, body: data})))
+            .then(responseData => {
+                if (responseData.status === 200) {
+                    console.log('Success:', responseData.body);
+                    // Disable the button and show success message
+                    document.getElementById('presentButton').disabled = true;
+                    alert('Attendance marked successfully.');
+                } else {
+                    console.log('Error:', responseData.body);
+                    // Show error message
+                    alert(responseData.body.error);
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -203,29 +207,33 @@
         });
 
         document.getElementById('leaveButton').addEventListener('click', function() {
-            const leaveButton = true;  // Boolean value to send
-            
             fetch('/mark_attendance', {
-                method: 'POST',  // or 'GET' depending on your route
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    leaveButton: leaveButton,
+                    presentButton: false,
+                    leaveButton: true
                 }),
             })
-            .then(response => response.json())
-            .then(data => {
-                // Handle the response from Flask route here
-                console.log('Success:', data);
-                // Disable the button after success
-                // Optionally, you can change text or style to indicate success
+            .then(response => response.json().then(data => ({status: response.status, body: data})))
+            .then(responseData => {
+                if (responseData.status === 200) {
+                    console.log('Success:', responseData.body);
+                    // Disable the button and show success message
+                    document.getElementById('leaveButton').disabled = true;
+                    alert('Leave marked successfully.');
+                } else {
+                    console.log('Error:', responseData.body);
+                    // Show error message
+                    alert(responseData.body.error);
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
         });
-
     </script>
 </body>
 </html>

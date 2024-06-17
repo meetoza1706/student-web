@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, session, jsonify, redirect, u
 from flask_mysqldb import MySQL
 from flask_session import Session
 from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 import random
@@ -46,6 +46,8 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+last_attendb_dates = None
 
 # Schedule dictionary
 schedule = {
@@ -145,16 +147,36 @@ def home():
 
 @app.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
-    data = request.get_json()
+    try:
+        today = date.today().isoformat()
+        data = request.get_json()
+        present_button = data.get('presentButton')
+        leave_button = data.get('leaveButton')
 
-    present_button = data.get('presentButton')
-    if present_button == True:
-        print("well done meet!")
-    
-    leaveButton = data.get('leaveButton')
-    if leaveButton == True:
-        print("leaving too soon?")
-    return jsonify({'message':'Data received successfully.'})
+        if present_button:
+            if 'last_attendp_date' in session and session['last_attendp_date'] == today:
+                print("Present button already pressed today.")
+                return jsonify({'error': 'You already pressed the present button today.'}), 400
+            else:
+                session['last_attendp_date'] = today
+                print("Present button pressed successfully.")
+
+        if leave_button:
+            if 'last_attendp_date' not in session or session['last_attendp_date'] != today:
+                print("Cannot press leave button without pressing present button first.")
+                return jsonify({'error': 'You must press the present button before pressing the leave button.'}), 400
+            if 'last_attendb_date' in session and session['last_attendb_date'] == today:
+                print("Leave button already pressed today.")
+                return jsonify({'error': 'You already pressed the leave button today.'}), 400
+            else:
+                session['last_attendb_date'] = today
+                print("Leave button pressed successfully.")
+
+        return jsonify({'message': 'Data received successfully.'})
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return jsonify({'error': 'An error occurred.'}), 500
 
 def hash_password(password):
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -185,6 +207,11 @@ def send_email(email, otp):
     except Exception as e:
         print(f"Failed to send email: {e}")
         return False
+
+@app.route('/clear')
+def clear():
+    session.clear()
+    return redirect('/')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
