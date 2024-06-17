@@ -24,3 +24,20 @@ schedule = {
                  "lectures": ["MS", "ADBMS", "WT-LAB", "WT-LAB", "end of day"],
                  "class_numbers": ["Class 31", "Class 32", "Class 33", "Class 34", ""]}
 }
+
+document.getElementById('presentButton').addEventListener('click', () => makeItRain('😊'));
+        document.getElementById('leaveButton').addEventListener('click', () => makeItRain('😢'));
+        
+        function makeItRain(emoji) {
+            for (let i = 0; i < 30; i++) {
+                let span = document.createElement('span');
+                span.className = 'emoji';
+                span.innerHTML = emoji;
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.animationDuration = Math.random() * 2 + 3 + 's';
+                document.body.appendChild(span);
+                setTimeout(() => {
+                    span.remove();
+                }, 5000); // Match the timeout duration with the animation duration
+            }
+        }

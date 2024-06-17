@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, session, jsonify, redirect, url_for, flash
 from flask_mysqldb import MySQL
+from flask_session import Session
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
+from sqlalchemy import create_engine
+from sqlalchemy.orm import scoped_session
+import random
 import random
 import os
 import smtplib
@@ -19,11 +23,18 @@ OUTLOOK_SMTP_PORT = 587
 OUTLOOK_EMAIL = 'studentweb24@hotmail.com'
 OUTLOOK_PASSWORD = 'Studentweb@2420'
 
+app = Flask(__name__)
+app.secret_key = os.urandom(24)
+
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = ''
 app.config['MYSQL_DB'] = 'studentweb'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/studentweb'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
@@ -112,19 +123,16 @@ def home():
         greeting = "Good Morning!"
     elif 12 <= now.hour < 18:
         greeting = "Good Afternoon!"
-    elif 18 <= now.hour < 22:
-        greeting = "Good Evening!"
     else:
         greeting = "Good Evening!"
 
     username = session.get('username', 'guest')
     ausername = session.get('username')
-    first_letter = username[0]
 
     profile_photo = None
     email = None
 
-    if 'logged_in' in session:
+    if 'username' in session:
         cursor = mysql.connection.cursor()
         cursor.execute('SELECT email, profile_photo FROM user_data WHERE username = %s', (username,))
         user_data = cursor.fetchone()
@@ -133,7 +141,8 @@ def home():
             profile_photo = user_data[1]
         cursor.close()
 
-    return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo)
+    return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo, schedule=schedule, now=now)
+
 
 
 def hash_password(password):
@@ -242,16 +251,19 @@ def login():
         password = request.form['password']
         
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT username, password FROM user_data WHERE username = %s', (username,))
+        cursor.execute('SELECT user_id, username, password FROM user_data WHERE username = %s', (username,))
         account = cursor.fetchone()
         
         if account:
-            username_from_db = account[0]
-            hashed_password = account[1]  
+            user_id = account[0]
+            username_from_db = account[1]
+            hashed_password = account[2]
             
             if bcrypt.check_password_hash(hashed_password, password):
+                session.permanent = True  # Set session as permanent
                 session['logged_in'] = True
                 session['username'] = username_from_db
+                session['user_id'] = user_id  # Add user ID to session
                 return redirect('/')
             else:
                 msg = 'Incorrect password. Please try again.'
@@ -261,6 +273,7 @@ def login():
         cursor.close()
 
     return render_template('login.html', msg=msg)
+
 
 @app.route('/dashboard')
 def dashboard():
