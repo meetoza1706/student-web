@@ -152,13 +152,21 @@ def mark_attendance():
         data = request.get_json()
         present_button = data.get('presentButton')
         leave_button = data.get('leaveButton')
+        user_id =  session['user_id']
 
         if present_button:
             if 'last_attendp_date' in session and session['last_attendp_date'] == today:
                 print("Present button already pressed today.")
                 return jsonify({'error': 'You already pressed the present button today.'}), 400
             else:
+                attendance = 6
+                absent = 0
+                late = 0
                 session['last_attendp_date'] = today
+                cursor = mysql.connection.cursor()
+                cursor.execute('INSERT INTO attendance (day, present_lectures, absent_lectures, late_lectures, user_id) VALUES (%s, %s, %s, %s, %s)', (today, attendance, absent, late, user_id))
+                mysql.connection.commit()
+                cursor.close()
                 print("Present button pressed successfully.")
 
         if leave_button:
@@ -170,6 +178,14 @@ def mark_attendance():
                 return jsonify({'error': 'You already pressed the leave button today.'}), 400
             else:
                 session['last_attendb_date'] = today
+                attendance = 4
+                absent = 2
+                late = 0
+                cursor = mysql.connection.cursor()
+                cursor.execute('UPDATE attendance SET present_lectures = %s, absent_lectures = %s, late_lectures = %s WHERE user_id = %s', (attendance, absent, late, user_id))
+                mysql.connection.commit()
+                cursor.close()
+                print("Present button pressed successfully.")
                 print("Leave button pressed successfully.")
 
         return jsonify({'message': 'Data received successfully.'})

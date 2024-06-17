@@ -11,12 +11,12 @@
 /* Track styles */
 ::-webkit-scrollbar-track {
     display: none;
-    background-color: transparent; /* Makes the track invisible */
+    background-color: #1f27bf; /* Makes the track invisible */
 }
 
 /* Thumb styles */
 ::-webkit-scrollbar-thumb {
-    background-color: #252525; /* Makes the thumb gray */
+    background-color: white; /* Makes the thumb gray */
     border-radius: 10px;
     -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
 }
