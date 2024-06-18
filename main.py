@@ -347,8 +347,6 @@ def dashboard():
 
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot_password():
-    if 'logged_in' not in session:
-        return redirect(url_for('login'))
     msg = ''
     if request.method == 'POST':
         email = request.form['email']
@@ -371,8 +369,6 @@ def forgot_password():
 
 @app.route('/reset_password', methods=['GET', 'POST'])
 def reset_password():
-    if 'logged_in' not in session:
-        return redirect(url_for('login'))
     msg = ''
     if request.method == 'POST':
         otp = request.form['otp']
