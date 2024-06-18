@@ -204,3 +204,27 @@ input[type=number]::-webkit-outer-spin-button {
     animation: fall linear infinite;
     pointer-events: none;
 }
+
+.radio-red:checked {
+	background-color: red;
+	border-color: red;
+}
+
+.radio-green:checked {
+	background-color: green;
+	border-color: green;
+}
+
+.radio-orange:checked {
+	background-color: orange;
+	border-color: orange;
+}
+
+input[type="radio"]:hover::before {
+	border: 2px solid #999;
+}
+
+.rounded-full {
+	border-radius: 9999px;
+	/* Set a high value for a circular shape */
+}

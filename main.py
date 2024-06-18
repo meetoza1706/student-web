@@ -428,6 +428,8 @@ def profile():
             cursor.execute('UPDATE user_data SET f_name = %s, l_name = %s WHERE username = %s', (f_name, l_name, username))
             mysql.connection.commit()
 
+
+
         # Handle password update
         current_password = request.form.get('current_password')
         new_password = request.form.get('new_password')

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,33 @@
     <link rel="stylesheet" href="static\style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .radio-red:checked {
+            background-color: red;
+            border-color: red;
+        }
+
+        .radio-green:checked {
+            background-color: green;
+            border-color: green;
+        }
+
+        .radio-orange:checked {
+            background-color: orange;
+            border-color: orange;
+        }
+
+        input[type="radio"]:hover::before {
+            border: 2px solid #999;
+        }
+
+        .rounded-full {
+            border-radius: 9999px;
+            /* Set a high value for a circular shape */
+        }
+    </style>
 </head>
+
 <body class="bg-[#1f27bf]">
     <div class="area h-[150%]">
         <ul class="circles h-full">
@@ -57,10 +84,15 @@
                         type="button">
                         <span class="sr-only">Open user menu</span>
                         {% if profile_photo %}
-                            <img src="{{ url_for('static', filename='images/profile_uploads/' + profile_photo) }}" class="rounded-full h-12 w-12 object-cover" alt="Profile Photo" id="profilePhotoPreview">
+                        <img src="{{ url_for('static', filename='images/profile_uploads/' + profile_photo) }}"
+                            class="rounded-full h-12 w-12 object-cover" alt="Profile Photo" id="profilePhotoPreview">
                         {% else %}
-                            <div class="w-12 h-12 rounded-full profile-placeholder flex justify-center" id="profilePhotoPlaceholder"><p class="mt-3">{{ username[0] }}</p></div>
-                            <img id="profilePhotoPreview" class="rounded-full h-48 w-48 object-cover" style="display: none;">
+                        <div class="w-12 h-12 rounded-full profile-placeholder flex justify-center"
+                            id="profilePhotoPlaceholder">
+                            <p class="mt-3">{{ username[0] }}</p>
+                        </div>
+                        <img id="profilePhotoPreview" class="rounded-full h-48 w-48 object-cover"
+                            style="display: none;">
                         {% endif %}
                     </button>
                     <!-- Dropdown menu -->
@@ -71,7 +103,8 @@
                             <div class="font-medium truncate">{{email}}</div>
                         </div>
                         <div class="py-2">
-                            <a href="/profile"class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</a>
+                            <a href="/profile"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</a>
                             <a href="/logout"
                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Log
                                 out</a>
@@ -128,20 +161,175 @@
     <section id="buttons" class="my-[10%]">
         <div class="flex flex-col justify-center items-center w-full">
             <div class="flex gap-4">
-                <button id="presentButton" class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out">
+                <button id="presentButton"
+                    class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out">
                     <h1>I am Present!</h1>
                 </button>
-                <button id="leaveButton" class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out">
+                <button id="leaveButton"
+                    class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out">
                     <h1>Leaving after break</h1>
                 </button>
             </div>
             <div class="flex flex-col items-center justify-center mt-6">
-                <a href="#"><p class="text-white text-lg hover:text-blue-500 ease-in-out">Custom absence?</p></a>
-                <a href="#"><p class="text-white text-lg hover:text-blue-500 ease-in-out">Apply for leave.</p></a>
+                <!-- Modal toggle -->
+                <p data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
+                    class="block text-white hover:text-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                    type="button">
+                    Custom Attendance!
+                </p>
+
+                <!-- Main modal -->
+                <div id="authentication-modal" tabindex="-1" aria-hidden="true"
+                    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative p-4 w-[40%] max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                            <!-- Modal header -->
+                            <h1 class="text-3xl text-white pl-[40%] text-center inline">lectures</h1>
+                            <button type="button"
+                                class="float-right end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                data-modal-hide="authentication-modal">
+                                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 14 14">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                            <div
+                                class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 gap-[2%]">
+                                <div class="flex gap-3">
+                                    <form id="attendanceForm" class="flex">
+                                        <div class="border-r-2 pr-2 border-r-indigo-50">
+                                            <ul>
+                                                <li>
+                                                    <div class="flex gap-2 w-[30%]">
+                                                        <input id="absent-1" type="radio" value="red" name="col-1"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+
+                                                        <label for="horizontal-list-radio-license-red"
+                                                            class="text-white">Absent</label>
+                                                        <input id="late-1" type="radio" value="orange" name="col-1"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-orange"
+                                                            class="text-white">Late</label>
+                                                        <input id="present-1" type="radio" value="green" name="col-1"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-green"
+                                                            class="text-white">Present</label>
+                                                        <h4 class="text-white">1<sup>st</sup></h4>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="flex gap-2 w-[30%]">
+                                                        <input id="absent-2" type="radio" value="red" name="col-2"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+
+                                                        <label for="horizontal-list-radio-license-red"
+                                                            class="text-white">Absent</label>
+                                                        <input id="late-2" type="radio" value="orange" name="col-2"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-orange"
+                                                            class="text-white">Late</label>
+                                                        <input id="present-2" type="radio" value="green" name="col-2"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-green"
+                                                            class="text-white">Present</label>
+                                                        <h4 class="text-white">2<sup>nd</sup></h4>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="flex gap-2 w-[20%]">
+                                                        <input id="absent-3" type="radio" value="red" name="col-3"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+
+                                                        <label for="late-3" class="text-white">Absent</label>
+                                                        <input id="late-3" type="radio" value="orange" name="col-3"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-orange"
+                                                            class="text-white">Late</label>
+                                                        <input id="present-3" type="radio" value="green" name="col-3"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-green"
+                                                            class="text-white">Present</label>
+                                                        <h4 class="text-white">3<sup>rd</sup></h4>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="ml-2">
+                                            <ul>
+                                                <li>
+                                                    <div class="flex gap-2 w-[20%]">
+                                                        <input id="absent-4" type="radio" value="red" name="col-4"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+
+                                                        <label for="horizontal-list-radio-license-red"
+                                                            class="text-white">Absent</label>
+                                                        <input id="late-4" type="radio" value="orange" name="col-4"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-orange"
+                                                            class="text-white">Late</label>
+                                                        <input id="present-4" type="radio" value="green" name="col-4"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-green"
+                                                            class="text-white">Present</label>
+                                                        <h4 class="text-white">4<sup>th</sup></h4>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="flex gap-2 w-[20%]">
+                                                        <input id="absent-5" type="radio" value="red" name="col-5"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+
+                                                        <label for="horizontal-list-radio-license-red"
+                                                            class="text-white">Absent</label>
+                                                        <input id="late-5" type="radio" value="orange" name="col-5"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-orange"
+                                                            class="text-white">Late</label>
+                                                        <input id="present-5" type="radio" value="green" name="col-5"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-green"
+                                                            class="text-white">Present</label>
+                                                        <h4 class="text-white">5<sup>th</sup></h4>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <div class="flex gap-2 w-[20%]">
+                                                        <input id="absent-6" type="radio" value="red" name="col-6"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+
+                                                        <label for="late-3" class="text-white">Absent</label>
+                                                        <input id="late-6" type="radio" value="orange" name="col-6"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-orange"
+                                                            class="text-white">Late</label>
+                                                        <input id="present-6" type="radio" value="green" name="col-6"
+                                                            class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
+                                                        <label for="horizontal-list-radio-license-green"
+                                                            class="text-white">Present</label>
+                                                        <h4 class="text-white">6<sup>th</sup></h4>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                </div>
+                            </div>
+                        </form>
+                        <button onclick="calculateAttendance()" class="ml-[35%] w-[20%] bg-blue-500">submit</button>
+                            <!-- Modal body -->
+
+                        </div>
+                    </div>
+                </div>
+                <a href="#">
+                    <p class="text-white text-lg hover:text-blue-500 ease-in-out">Apply for leave.</p>
+                </a>
             </div>
         </div>
     </section>
-    
+
     <footer id="footer">
         <div class="w-full bg-white text-center text-2xl py-3">Made by Meet Oza</div>
     </footer>
@@ -149,7 +337,7 @@
     <script>
         document.getElementById('presentButton').addEventListener('click', () => makeItRain('😊'));
         document.getElementById('leaveButton').addEventListener('click', () => makeItRain('😢'));
-        
+
         function makeItRain(emoji) {
             for (let i = 0; i < 30; i++) {
                 let span = document.createElement('span');
@@ -163,7 +351,7 @@
                 }, 5000); // Match the timeout duration with the animation duration
             }
         }
-        document.getElementById('presentButton').addEventListener('click', function() {
+        document.getElementById('presentButton').addEventListener('click', function () {
             fetch('/mark_attendance', {
                 method: 'POST',
                 headers: {
@@ -171,29 +359,29 @@
                 },
                 body: JSON.stringify({ presentButton: true })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.success) {
-                    alert(data.message); // Display the error message from the server
-                } else {
-                    console.log('Success:', data.message); // Log success message
-                    alert('Attendance marked successfully.'); // Display success message
-                    // Optionally, update UI or disable button after successful attendance marking
-                    document.getElementById('presentButton').disabled = true;
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error marking attendance.'); // Display generic error message
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        alert(data.message); // Display the error message from the server
+                    } else {
+                        console.log('Success:', data.message); // Log success message
+                        alert('Attendance marked successfully.'); // Display success message
+                        // Optionally, update UI or disable button after successful attendance marking
+                        document.getElementById('presentButton').disabled = true;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Error marking attendance.'); // Display generic error message
+                });
         });
-        
-        document.getElementById('leaveButton').addEventListener('click', function() {
+
+        document.getElementById('leaveButton').addEventListener('click', function () {
             fetch('/mark_attendance', {
                 method: 'POST',
                 headers: {
@@ -201,28 +389,50 @@
                 },
                 body: JSON.stringify({ leaveButton: true })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (!data.success) {
-                    alert(data.message); // Display the error message from the server
-                } else {
-                    console.log('Success:', data.message); // Log success message
-                    alert('Leave marked successfully.'); // Display success message
-                    // Optionally, update UI or disable button after successful leave marking
-                    document.getElementById('leaveButton').disabled = true;
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('Error marking leave.'); // Display generic error message
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        alert(data.message); // Display the error message from the server
+                    } else {
+                        console.log('Success:', data.message); // Log success message
+                        alert('Leave marked successfully.'); // Display success message
+                        // Optionally, update UI or disable button after successful leave marking
+                        document.getElementById('leaveButton').disabled = true;
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                    alert('Error marking leave.'); // Display generic error message
+                });
         });
+        function calculateAttendance() {
+            const form = document.getElementById('attendanceForm');
+            const inputs = form.querySelectorAll('input[type="radio"]:checked');
+            
+            let present = 0;
+            let absent = 0;
+            let late = 0;
+            
+            inputs.forEach(input => {
+                if (input.value === 'green') {
+                    present++;
+                } else if (input.value === 'red') {
+                    absent++;
+                } else if (input.value === 'orange') {
+                    late++;
+                }
+            });
         
+            console.log('Total Present:', present);
+            console.log('Total Absent:', absent);
+            console.log('Total Late:', late);
+        }
     </script>
 </body>
+
 </html>
