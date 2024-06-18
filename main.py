@@ -147,52 +147,60 @@ def home():
 
 @app.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
-    try:
-        today = date.today().isoformat()
-        data = request.get_json()
-        present_button = data.get('presentButton')
-        leave_button = data.get('leaveButton')
-        user_id =  session['user_id']
+    data = request.get_json()
+    cursor = mysql.connection.cursor()
+    current_user_id = session['user_id']  # Assuming you have stored user_id in session
+    today = date.today()
+    present_button = data.get('presentButton', False)
+    leave_button = data.get('leaveButton', False)
+    
+    cursor.execute('SELECT PB_status, LB_status FROM attendance WHERE user_id = %s AND day = %s', (current_user_id, today))
+    user_data = cursor.fetchone()
+    if user_data:
+        PB_status = user_data[0]
+        LB_status = user_data[1]
+    else:
+        PB_status = 0
+        LB_status = 0
 
-        if present_button:
-            if 'last_attendp_date' in session and session['last_attendp_date'] == today:
-                print("Present button already pressed today.")
-                return jsonify({'error': 'You already pressed the present button today.'}), 400
-            else:
-                attendance = 6
-                absent = 0
-                late = 0
-                session['last_attendp_date'] = today
-                cursor = mysql.connection.cursor()
-                cursor.execute('INSERT INTO attendance (day, present_lectures, absent_lectures, late_lectures, user_id) VALUES (%s, %s, %s, %s, %s)', (today, attendance, absent, late, user_id))
-                mysql.connection.commit()
-                cursor.close()
-                print("Present button pressed successfully.")
+    if present_button:
+        if PB_status == 1:
+            response_data = {'success': False, 'message': 'You have already marked your presence today.'}
+            print("You have already marked your presence today.")
+        else:
+            attendance = 6
+            absent = 0
+            late = 0
+            PB_status = 1
+            LB_status = 0
+            cursor.execute(
+                'INSERT INTO attendance (day, present_lectures, absent_lectures, late_lectures, PB_status, LB_status, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)', 
+                (today, attendance, absent, late, PB_status, LB_status, current_user_id))
+            mysql.connection.commit()
+            response_data = {'success': True, 'message': 'Presence marked successfully.'}
+    elif leave_button:
+        if PB_status == 0:
+            response_data = {'success': False, 'message': 'You should be present to be abesent at some point 🤬'}
+        elif LB_status == 1:
+            response_data = {'success': False, 'message': 'You have already marked your leave today.'}
+        else:
+            attendance = 4
+            absent = 2
+            late = 0
+            PB_status = 1
+            LB_status = 1
+            cursor.execute(
+                'UPDATE attendance SET present_lectures = %s, absent_lectures = %s, late_lectures = %s, PB_status = %s, LB_status = %s WHERE user_id = %s AND day = %s',
+                (attendance, absent, late, PB_status, LB_status, current_user_id, today)
+            )
+            mysql.connection.commit()
+            response_data = {'success': True, 'message': 'Leaving marked successfully.'}
+    else:
+        response_data = {'success': False, 'message': 'Invalid request.'}
 
-        if leave_button:
-            if 'last_attendp_date' not in session or session['last_attendp_date'] != today:
-                print("Cannot press leave button without pressing present button first.")
-                return jsonify({'error': 'You must press the present button before pressing the leave button.'}), 400
-            if 'last_attendb_date' in session and session['last_attendb_date'] == today:
-                print("Leave button already pressed today.")
-                return jsonify({'error': 'You already pressed the leave button today.'}), 400
-            else:
-                session['last_attendb_date'] = today
-                attendance = 4
-                absent = 2
-                late = 0
-                cursor = mysql.connection.cursor()
-                cursor.execute('UPDATE attendance SET present_lectures = %s, absent_lectures = %s, late_lectures = %s WHERE user_id = %s', (attendance, absent, late, user_id))
-                mysql.connection.commit()
-                cursor.close()
-                print("Present button pressed successfully.")
-                print("Leave button pressed successfully.")
+    cursor.close()
+    return jsonify(response_data), 200  
 
-        return jsonify({'message': 'Data received successfully.'})
-
-    except Exception as e:
-        print(f"An error occurred: {str(e)}")
-        return jsonify({'error': 'An error occurred.'}), 500
 
 def hash_password(password):
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
@@ -327,7 +335,7 @@ def login():
         cursor.close()
 
     return render_template('login.html', msg=msg)
-
+    
 
 @app.route('/dashboard')
 def dashboard():
@@ -532,6 +540,10 @@ def verify_email():
             msg = 'Invalid OTP. Please try again.'
 
     return render_template('verify_email.html', msg=msg)
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

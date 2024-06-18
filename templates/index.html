@@ -50,7 +50,7 @@
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                             href="#">Todo</a></li>
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="#">Career</a></li>
+                            href="#">Stats</a></li>
                     {% if ausername %}
                     <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar"
                         class="flex text-sm bg-gray-400 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -147,20 +147,6 @@
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
     <script>
-        document.getElementById('presentButton').addEventListener('click', () => markAttendance('full_day'));
-        document.getElementById('leaveButton').addEventListener('click', () => markAttendance('leave_after_break'));
-
-        function markAttendance(type) {
-            $.ajax({
-                type: 'POST',
-                url: '/mark_attendance',
-                contentType: 'application/json',
-                data: JSON.stringify({ [type]: true }),
-                success: function(response) {
-                    ac('Attendance updated: ' + response.attendance + ' lectures');
-                }
-            });
-        }
         document.getElementById('presentButton').addEventListener('click', () => makeItRain('😊'));
         document.getElementById('leaveButton').addEventListener('click', () => makeItRain('😢'));
         
@@ -183,57 +169,60 @@
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    presentButton: true,
-                    leaveButton: false
-                }),
+                body: JSON.stringify({ presentButton: true })
             })
-            .then(response => response.json().then(data => ({status: response.status, body: data})))
-            .then(responseData => {
-                if (responseData.status === 200) {
-                    console.log('Success:', responseData.body);
-                    // Disable the button and show success message
-                    document.getElementById('presentButton').disabled = true;
-                    alert('Attendance marked successfully.');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message); // Display the error message from the server
                 } else {
-                    console.log('Error:', responseData.body);
-                    // Show error message
-                    alert(responseData.body.error);
+                    console.log('Success:', data.message); // Log success message
+                    alert('Attendance marked successfully.'); // Display success message
+                    // Optionally, update UI or disable button after successful attendance marking
+                    document.getElementById('presentButton').disabled = true;
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
+                alert('Error marking attendance.'); // Display generic error message
             });
         });
-
+        
         document.getElementById('leaveButton').addEventListener('click', function() {
             fetch('/mark_attendance', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    presentButton: false,
-                    leaveButton: true
-                }),
+                body: JSON.stringify({ leaveButton: true })
             })
-            .then(response => response.json().then(data => ({status: response.status, body: data})))
-            .then(responseData => {
-                if (responseData.status === 200) {
-                    console.log('Success:', responseData.body);
-                    // Disable the button and show success message
-                    document.getElementById('leaveButton').disabled = true;
-                    alert('Leave marked successfully.');
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (!data.success) {
+                    alert(data.message); // Display the error message from the server
                 } else {
-                    console.log('Error:', responseData.body);
-                    // Show error message
-                    alert(responseData.body.error);
+                    console.log('Success:', data.message); // Log success message
+                    alert('Leave marked successfully.'); // Display success message
+                    // Optionally, update UI or disable button after successful leave marking
+                    document.getElementById('leaveButton').disabled = true;
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
+                alert('Error marking leave.'); // Display generic error message
             });
         });
+        
     </script>
 </body>
 </html>
