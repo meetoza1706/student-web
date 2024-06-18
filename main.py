@@ -285,6 +285,7 @@ def register():
                         msg = 'Username cannot be the same as email!'
                     else:
                         otp = generate_otp()
+
                         session['otp'] = otp
                         session['user_data'] = {
                             'username': username,
@@ -398,6 +399,7 @@ def reset_password():
 def logout():
     session.pop('username', None)
     session.pop('logged_in', None)
+    session.pop('user_id', None)
     return redirect(url_for('home'))
 
 @app.route('/profile', methods=['GET', 'POST'])
