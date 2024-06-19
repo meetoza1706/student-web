@@ -149,7 +149,7 @@ def home():
 def mark_attendance():
     data = request.get_json()
     cursor = mysql.connection.cursor()
-    current_user_id = session['user_id']  # Assuming you have stored user_id in session
+    current_user_id = session['user_id']
     today = date.today()
     present_button = data.get('presentButton', False)
     leave_button = data.get('leaveButton', False)
@@ -200,6 +200,21 @@ def mark_attendance():
 
     cursor.close()
     return jsonify(response_data), 200  
+
+@app.route('/c_attendance', methods=['GET', 'POST'])
+def custom_attendance():
+    data = request.get_json()
+    response_data = ''
+    cursor = mysql.connection.cursor()
+    current_user_id = session['user_id']
+    present = data.get('present', False)
+    absent = data.get('absent', False)
+    late = data.get('late', False)
+    print(f"present:{present}")
+    print(f"absent:{absent}")
+    print(f"late:{late}")
+    response_data = 'data recieved successfully'
+    return jsonify(response_data), 200
 
 
 def hash_password(password):

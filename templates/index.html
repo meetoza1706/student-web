@@ -316,8 +316,9 @@
                                         </div>
                                 </div>
                             </div>
-                        </form>
-                        <button onclick="calculateAttendance()" class="ml-[35%] w-[20%] bg-blue-500">submit</button>
+                            </form>
+                            <button onclick="calculateAttendance()" class="ml-[35%] w-[20%] bg-blue-500"
+                                id="submitButton">submit</button>
                             <!-- Modal body -->
 
                         </div>
@@ -410,14 +411,18 @@
                     alert('Error marking leave.'); // Display generic error message
                 });
         });
+        let present = 0;
+        let absent = 0;
+        let late = 0;
+
         function calculateAttendance() {
             const form = document.getElementById('attendanceForm');
             const inputs = form.querySelectorAll('input[type="radio"]:checked');
-            
-            let present = 0;
-            let absent = 0;
-            let late = 0;
-            
+
+            present = 0;
+            absent = 0;
+            late = 0;
+
             inputs.forEach(input => {
                 if (input.value === 'green') {
                     present++;
@@ -427,12 +432,39 @@
                     late++;
                 }
             });
-        
+
             console.log('Total Present:', present);
             console.log('Total Absent:', absent);
             console.log('Total Late:', late);
+
+            $.ajax({
+                url: '/c_attendance',
+                type: 'POST',
+                contentType: 'application/json', // Specify JSON content type
+                data: JSON.stringify({
+                    present: present,
+                    absent: absent,
+                    late: late
+                }),
+                success: function (response) {
+                    alert("Response from server: " + JSON.stringify(response));
+                },
+                error: function (error) {
+                    console.error(error);
+                    alert("Error: " + error.responseText);
+                }
+            });
         }
+
+        // Ensure the function is called when the form is submitted or at the appropriate time
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if event listener is already attached
+            if (!document.getElementById('submitButton').onclick) {
+                document.getElementById('submitButton').addEventListener('click', function () {
+                    calculateAttendance();
+                });
+            }
+        });
     </script>
 </body>
-
 </html>
