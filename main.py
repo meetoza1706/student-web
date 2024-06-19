@@ -143,6 +143,47 @@ def home():
             profile_photo = user_data[1]
         cursor.close()
 
+    if 'user_id' in session:
+        current_user_id = session['user_id']
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT present_lectures, absent_lectures, late_lectures FROM attendance WHERE user_id = %s', (current_user_id,))
+        attendance_data = cursor.fetchall()  
+
+        if attendance_data:
+            total_present = 0
+            total_absent = 0
+            total_late = 0
+            total_lectures = 0  
+
+            for row in attendance_data:
+                total_present += row[0]
+                total_absent += row[1]
+                total_late += row[2]
+                total_lectures += row[0] + row[1] + row[2]
+
+            if total_lectures > 0:
+                present_percentage = round((total_present / total_lectures) * 100, 2)
+                absent_percentage = round((total_absent / total_lectures) * 100, 2)
+                late_percentage = round((total_late / total_lectures) * 100, 2)
+
+                print(f"total present:{total_present}")
+                print(f"total absent:{total_absent}")
+                print(f"total late:{total_late}")
+                print(f"Total Lectures: {total_lectures}")
+                print(f"Overall Present percentage: {present_percentage:.2f}%")
+                print(f"Overall Absent percentage: {absent_percentage:.2f}%")
+                print(f"Overall Late percentage: {late_percentage:.2f}%")
+            else:
+                print("No attendance data available.")
+        else:
+            print("No data found for the user.")
+
+        cursor.close()
+    else:
+        print("No user_id in session.")
+
+
+
     return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo, schedule=schedule, now=now)
 
 @app.route('/mark_attendance', methods=['POST'])

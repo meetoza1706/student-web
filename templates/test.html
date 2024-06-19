@@ -34,7 +34,7 @@
     <div class="container">
         <h1 class="text-2xl font-semibold text-gray-800 mb-4">Pie Chart Example</h1>
 
-        <div id="chart"></div>
+        <div id="chart1"></div>
 
     </div>
 
@@ -48,30 +48,27 @@
 
             // Options for the pie chart
             const options = {
-                series: series,
-                chart: {
-                    type: 'pie',
-                    height: 350,
-                },
-                labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 200
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
+            series: [10, 20, 70],  // Data for 3 slices
+            chart: {
+                type: 'pie',
+                height: 350,
+            },
+            labels: ['Slice 1', 'Slice 2', 'Slice 3'],  // Labels for each slice
+            responsive: [{
+                breakpoint: 480,
+                options: {
+                    chart: {
+                        width: 200,
+                    },
+                    legend: {
+                        position: 'bottom',
                     }
-                }]
-            };
+                }
+            }]
+        };
 
-            // Initialize the pie chart
-            const chart = new ApexCharts(document.querySelector("#chart"), options);
-
-            // Render the chart
-            chart.render();
+        const chart = new ApexCharts(document.querySelector("#chart1"), options);
+        chart.render();
         });
     </script>
 
