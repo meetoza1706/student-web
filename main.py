@@ -210,9 +210,13 @@ def custom_attendance():
     present = data.get('present', False)
     absent = data.get('absent', False)
     late = data.get('late', False)
+    today = date.today()
     print(f"present:{present}")
     print(f"absent:{absent}")
     print(f"late:{late}")
+    cursor.execute('UPDATE attendance SET present_lectures = %s, absent_lectures = %s, late_lectures = %s WHERE user_id = %s AND day = %s', (present, absent, late, current_user_id, today))
+    mysql.connection.commit()
+    cursor.close()
     response_data = 'data recieved successfully'
     return jsonify(response_data), 200
 
