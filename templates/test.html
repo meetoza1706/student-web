@@ -4,185 +4,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <title>Pie Chart Example</title>
+    <!-- Include ApexCharts CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.min.css">
+    <!-- Include Flowbite CSS (for styling, optional) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
     <style>
-        .radio-red:checked {
-            background-color: red;
-            border-color: red;
+        body {
+            background-color: #f3f4f6;
         }
 
-        .radio-green:checked {
-            background-color: green;
-            border-color: green;
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .radio-orange:checked {
-            background-color: orange;
-            border-color: orange;
-        }
-
-        input[type="radio"]:hover::before {
-            border: 2px solid #999;
-        }
-
-        .rounded-full {
-            border-radius: 9999px;
-            /* Set a high value for a circular shape */
+        #chart {
+            background-color: #ffffff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
         }
     </style>
 </head>
 
 <body>
 
- <!-- Modal toggle -->
- <p data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
- class="block text-white hover:text-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
- type="button">
- Custom Attendance!
-</p>
+    <div class="container">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4">Pie Chart Example</h1>
 
-<!-- Main modal -->
-<div id="authentication-modal" tabindex="-1" aria-hidden="true"
- class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
- <div class="relative p-4 w-[40%] max-h-full">
-     <!-- Modal content -->
-     <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-         <!-- Modal header -->
-         <div
-             class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 gap-[2%]">
-     <div class="flex gap-3">
-         <div class="border-r-2 pr-2 border-r-indigo-50">
-             <ul>
-                 <li>
-                     <div class="flex gap-2 w-[20%]">
-                         <input id="absent-1" type="radio" value="red" name="col-1"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+        <div id="chart"></div>
 
-                         <label for="horizontal-list-radio-license-red" class="text-white">Absent</label>
-                         <input id="late-1" type="radio" value="orange"
-                             name="col-1"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-orange" class="text-white">Late</label>
-                         <input id="present-1" type="radio" value="green"
-                             name="col-1"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-green" class="text-white">Present</label>
-                         <h4 class="text-white">1<sup>st</sup></h4>
-                     </div>
-                 </li>
-                 <li>
-                     <div class="flex gap-2 w-[20%]">
-                         <input id="absent-2" type="radio" value="red" name="col-2"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+    </div>
 
-                         <label for="horizontal-list-radio-license-red" class="text-white">Absent</label>
-                         <input id="late-2" type="radio" value="orange"
-                             name="col-2"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-orange" class="text-white">Late</label>
-                         <input id="present-2" type="radio" value="green"
-                             name="col-2"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-green" class="text-white">Present</label>
-                         <h4 class="text-white">2<sup>st</sup></h4>
-                     </div>
-                 </li>
-                 <li>
-                     <div class="flex gap-2 w-[20%]">
-                         <input id="absent-3" type="radio" value="red" name="col-3"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+    <!-- Include ApexCharts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-                         <label for="late-3" class="text-white">Absent</label>
-                         <input id="late-3" type="radio" value="orange"
-                             name="col-3"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-orange" class="text-white">Late</label>
-                         <input id="present-3" type="radio" value="green"
-                             name="col-3"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-green" class="text-white">Present</label>
-                         <h4 class="text-white">3<sup>st</sup></h4>
-                     </div>
-                 </li>
-             </ul>
-         </div>
-         <div>
-             <ul>
-                 <li>
-                     <div class="flex gap-2 w-[20%]">
-                         <input id="absent-4" type="radio" value="red" name="col-4"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Sample data for the pie chart
+            const series = [44, 55, 13, 43, 22];
 
-                         <label for="horizontal-list-radio-license-red" class="text-white">Absent</label>
-                         <input id="late-4" type="radio" value="orange"
-                             name="col-4"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-orange" class="text-white">Late</label>
-                         <input id="present-4" type="radio" value="green"
-                             name="col-4"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-green" class="text-white">Present</label>
-                         <h4 class="text-white">4<sup>st</sup></h4>
-                     </div>
-                 </li>
-                 <li>
-                     <div class="flex gap-2 w-[20%]">
-                         <input id="absent-5" type="radio" value="red" name="col-5"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+            // Options for the pie chart
+            const options = {
+                series: series,
+                chart: {
+                    type: 'pie',
+                    height: 350,
+                },
+                labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
 
-                         <label for="horizontal-list-radio-license-red" class="text-white">Absent</label>
-                         <input id="late-5" type="radio" value="orange"
-                             name="col-5"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-orange" class="text-white">Late</label>
-                         <input id="present-5" type="radio" value="green"
-                             name="col-5"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-green" class="text-white">Present</label>
-                         <h4 class="text-white">5<sup>st</sup></h4>
-                     </div>
-                 </li>
-                 <li>
-                     <div class="flex gap-2 w-[20%]">
-                         <input id="absent-6" type="radio" value="red" name="col-6"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-red rounded-full checked:ring-red-500 checked:border-transparent">
+            // Initialize the pie chart
+            const chart = new ApexCharts(document.querySelector("#chart"), options);
 
-                         <label for="late-3" class="text-white">Absent</label>
-                         <input id="late-6" type="radio" value="orange"
-                             name="col-6"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-orange" class="text-white">Late</label>
-                         <input id="present-6" type="radio" value="green"
-                             name="col-6"
-                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
-                         <label for="horizontal-list-radio-license-green" class="text-white">Present</label>
-                         <h4 class="text-white">6<sup>st</sup></h4>
-                     </div>
-                 </li>
-             </ul>
-         </div>
-     </div>
-     
-             <button type="button"
-                 class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                 data-modal-hide="authentication-modal">
-                 <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                     viewBox="0 0 14 14">
-                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                         d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                 </svg>
-                 <span class="sr-only">Close modal</span>
-             </button>
-         </div>
-         <!-- Modal body -->
+            // Render the chart
+            chart.render();
+        });
+    </script>
 
-     </div>
- </div>
-</div>
 </body>
 
 </html>

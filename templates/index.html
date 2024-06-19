@@ -69,15 +69,17 @@
                 <img class="lg:h-2/3 h-5" src="static\images\web-logo1.png" alt="">
             </div>
             <div class="p-6 w-full lg:flex hidden justify-end items-center">
-                <ul class="flex gap-20 font-bold">
+                <ul class="flex gap-20 font-bold items-center">
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                             href="/">Home</a></li>
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                             href="#buttons">Attendance</a></li>
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="#">Stats</a></li>
+                            href="#stats">Stats</a></li>
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                             href="#">Todo</a></li>
+                    <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                            href="#">About us</a></li>
                     {% if ausername %}
                     <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar"
                         class="flex text-sm bg-gray-400 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -162,20 +164,20 @@
         <div class="flex flex-col justify-center items-center w-full">
             <div class="flex gap-4">
                 <button id="presentButton"
-                    class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out">
+                    class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out rounded-lg">
                     <h1>I am Present!</h1>
                 </button>
                 <button id="leaveButton"
-                    class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out">
+                    class="bg-white py-12 px-40 text-xl hover:bg-blue-500 hover:text-white ease-in-out rounded-lg">
                     <h1>Leaving after break</h1>
                 </button>
             </div>
             <div class="flex flex-col items-center justify-center mt-6">
                 <!-- Modal toggle -->
                 <p data-modal-target="authentication-modal" data-modal-toggle="authentication-modal"
-                    class="block text-white hover:text-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                    class="block text-white hover:text-blue-500 font-medium rounded-lg text-xl px-5 py-2.5 text-center "
                     type="button">
-                    Custom Attendance!
+                    Custom Attendance?
                 </p>
 
                 <!-- Main modal -->
@@ -268,7 +270,7 @@
                                                             class="text-white">Absent</label>
                                                         <input id="late-4" type="radio" value="orange" name="col-4"
                                                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                                                        <label for="horizontal-list-radio-license-orange"
+                                                       <label for="horizontal-list-radio-license-orange"
                                                             class="text-white">Late</label>
                                                         <input id="present-4" type="radio" value="green" name="col-4"
                                                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
@@ -328,7 +330,11 @@
         </div>
     </section>
     <section id="stats">
-
+            <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg flex gap-[2%] justify-center items-center">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>
+        </div>
     </section>
 
     <footer id="footer">
