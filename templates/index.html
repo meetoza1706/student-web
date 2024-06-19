@@ -40,7 +40,7 @@
 </head>
 
 <body class="bg-[#1f27bf]">
-    <div class="area h-[150%]">
+    <div class="area h-[300%]">
         <ul class="circles h-full">
             <li></li>
             <li></li>
@@ -272,7 +272,7 @@
                                                             class="text-white">Absent</label>
                                                         <input id="late-4" type="radio" value="orange" name="col-4"
                                                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-orange rounded-full checked:ring-orange-500 checked:border-transparent">
-                                                       <label for="horizontal-list-radio-license-orange"
+                                                        <label for="horizontal-list-radio-license-orange"
                                                             class="text-white">Late</label>
                                                         <input id="present-4" type="radio" value="green" name="col-4"
                                                             class="appearance-none w-4 h-4 bg-gray-100 border-gray-300 dark:bg-gray-600 dark:border-gray-500 radio-green rounded-full checked:ring-green-500 checked:border-transparent">
@@ -332,13 +332,13 @@
         </div>
     </section>
     <section id="stats">
-            <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg flex gap-[2%] justify-center items-center">
+        <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg  gap-[2%] justify-center">
             <div class="container">
-                    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Till now</h1>
-            
-                    <div id="chart"></div>
+                <h1 class="text-2xl font-semibold text-gray-800 mb-4">Pie Chart Examples</h1>
+        
+                <div class="chart-container" id="chart1"></div>
+                <div class="chart-container" id="chart2"></div>
             </div>
-            <div>2</div>
             <div>3</div>
         </div>
     </section>
@@ -353,7 +353,11 @@
         let present_percent;
         let absent_percent;
         let late_percent;
-
+        let a_present_percent;
+        let a_absent_percent;
+        let a_late_percent;
+        let remaining;
+    
         function fetchData() {
             fetch('/?ajax=1')
                 .then(response => {
@@ -367,31 +371,44 @@
                     present_percent = data.present_percent;
                     absent_percent = data.absent_percent;
                     late_percent = data.late_percent;
-
+                    a_present_percent = data.a_present_percent;
+                    a_absent_percent = data.a_absent_percent;
+                    a_late_percent = data.a_late_percent;
+                    remaining = data.remaining;
+    
                     // Log all global variables to the console
                     console.log('Present percent:', present_percent);
                     console.log('Absent percent:', absent_percent);
                     console.log('Late percent:', late_percent);
-
-                    // Render the chart with the fetched data
-                    renderChart();
+                    console.log('a_present_percent:', a_present_percent);
+                    console.log('a_absent_percent:', a_absent_percent);
+                    console.log('a_late_percent:', a_late_percent);
+                    console.log('remaining:', remaining);
+    
+                    // Render the charts with the fetched data
+                    renderChart1();
+                    renderChart2();
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
                 });
         }
-
-        function renderChart() {
+    
+        function renderChart1() {
             // Check if data has been fetched
             if (present_percent !== undefined && absent_percent !== undefined && late_percent !== undefined) {
-                // Options for the pie chart
-                const options = {
+                // Define colors for slices
+                const colors = ['#1fab1f', '#ff0000', '#ffa500'];
+        
+                // Options for the pie chart 1
+                const options1 = {
                     series: [present_percent, absent_percent, late_percent],  // Data for 3 slices
                     chart: {
                         type: 'pie',
                         height: 350,
                     },
                     labels: ['Present', 'Absent', 'Late'],  // Labels for each slice
+                    colors: colors,  // Custom colors for slices
                     responsive: [{
                         breakpoint: 480,
                         options: {
@@ -404,17 +421,52 @@
                         }
                     }]
                 };
-
-                const chart = new ApexCharts(document.querySelector("#chart"), options);
-                chart.render();
+        
+                const chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+                chart1.render();
             } else {
-                console.error('Data not loaded yet');
+                console.error('Data not loaded yet for chart 1');
             }
         }
-
+        
+        function renderChart2() {
+            // Check if data has been fetched
+            if (a_present_percent !== undefined && a_absent_percent !== undefined && a_late_percent !== undefined && remaining !== undefined) {
+                // Define colors for slices
+                const colors = ['#1fab1f', '#ff0000', '#ffa500', '#cccccc'];
+        
+                // Options for the pie chart 2
+                const options2 = {
+                    series: [a_present_percent, a_absent_percent, a_late_percent, remaining],  // Data for 4 slices
+                    chart: {
+                        type: 'pie',
+                        height: 350,
+                    },
+                    labels: ['Present', 'Absent', 'Late', 'Remaining'],  // Labels for each slice
+                    colors: colors,  // Custom colors for slices
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200,
+                            },
+                            legend: {
+                                position: 'bottom',
+                            }
+                        }
+                    }]
+                };
+        
+                const chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+                chart2.render();
+            } else {
+                console.error('Data not loaded yet for chart 2');
+            }
+        }
+    
         // Fetch data when the page loads
         window.onload = fetchData;
-    </script>
+    </script>    
     <script>
         document.getElementById('presentButton').addEventListener('click', () => makeItRain('😊'));
         document.getElementById('leaveButton').addEventListener('click', () => makeItRain('😢'));
@@ -545,7 +597,7 @@
                 });
             }
         });
-    
+
     </script>
 </body>
 
