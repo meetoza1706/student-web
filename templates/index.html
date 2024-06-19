@@ -12,6 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
         .radio-red:checked {
             background-color: red;
@@ -81,7 +82,7 @@
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                             href="#">Todo</a></li>
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="#">About</a></li>
+                            href="#">About us</a></li>
                     {% if ausername %}
                     <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar"
                         class="flex text-sm bg-gray-400 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -333,13 +334,20 @@
     </section>
     <section id="stats">
         <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg  gap-[2%] justify-center">
-            <div class="container">
-                <h1 class="text-2xl font-semibold text-gray-800 mb-4">Pie Chart Examples</h1>
-        
-                <div class="chart-container" id="chart1"></div>
-                <div class="chart-container" id="chart2"></div>
+            <div class="container mx-auto p-8">
+                <div class="bg-white shadow-md rounded-lg p-8 mb-8">
+                    <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Chart 1</h2>
+                    <div id="chart1" class="w-full h-96"></div>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-8 mb-8">
+                    <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Chart 2</h2>
+                    <div id="chart2" class="w-full h-96"></div>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-8">
+                    <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Bar Chart</h2>
+                    <div id="chart3" class="w-full h-96"></div>
+                </div>
             </div>
-            <div>3</div>
         </div>
     </section>
 
@@ -357,6 +365,10 @@
         let a_absent_percent;
         let a_late_percent;
         let remaining;
+        let late_lectures;
+        let present_lectures;
+        let absent_lectures;
+        let total_lectures;
     
         function fetchData() {
             fetch('/?ajax=1')
@@ -375,19 +387,21 @@
                     a_absent_percent = data.a_absent_percent;
                     a_late_percent = data.a_late_percent;
                     remaining = data.remaining;
+                    late_lectures = data.late_lectures;
+                    present_lectures = data.present_lectures;
+                    absent_lectures = data.absent_lectures;
+                    total_lectures = data.total_lectures;
     
                     // Log all global variables to the console
-                    console.log('Present percent:', present_percent);
-                    console.log('Absent percent:', absent_percent);
-                    console.log('Late percent:', late_percent);
-                    console.log('a_present_percent:', a_present_percent);
-                    console.log('a_absent_percent:', a_absent_percent);
-                    console.log('a_late_percent:', a_late_percent);
-                    console.log('remaining:', remaining);
+                    console.log('Present:', present_lectures);
+                    console.log('absent:', absent_lectures);
+                    console.log('late:', late_lectures);
+                    console.log('total:', total_lectures);
     
                     // Render the charts with the fetched data
                     renderChart1();
                     renderChart2();
+                    renderChart3();  // Render third chart after data fetch
                 })
                 .catch(error => {
                     console.error('Fetch error:', error);
@@ -463,10 +477,85 @@
                 console.error('Data not loaded yet for chart 2');
             }
         }
+
+        function renderChart3() {
+            // Check if data has been fetched
+            if (present_lectures !== undefined && absent_lectures !== undefined && late_lectures !== undefined) {
+                const options3 = {
+                    series: [{
+                        name: 'Lectures',
+                        data: [present_lectures, absent_lectures, late_lectures]
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'bar',
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: true,
+                            borderRadius: 4,
+                            dataLabels: {
+                                position: 'center', // Center-align the data labels
+                            },
+                        },
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        style: {
+                            fontSize: '12px',
+                            colors: ['#304758']
+                        }
+                    },
+                    xaxis: {
+                        categories: ['Present Lectures', 'Absent Lectures', 'Late Lectures'],
+                        labels: {
+                            style: {
+                                fontSize: '14px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                fontSize: '12px'
+                            }
+                        }
+                    },
+                    title: {
+                        text: 'Attendance Overview',
+                        align: 'center',
+                        margin: 10,
+                        offsetX: 0,
+                        offsetY: 0,
+                        floating: false,
+                        style: {
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            color: '#263238'
+                        },
+                    }
+                };
+        
+                const chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
+                chart3.render();
+            } else {
+                console.error('Data not loaded yet for chart 3');
+            }
+        }
+
+        // Render charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            renderChart1();
+            renderChart2();
+            renderChart3(); // Render third chart initially with default values
+        });
     
         // Fetch data when the page loads
         window.onload = fetchData;
-    </script>    
+    </script>  
     <script>
         document.getElementById('presentButton').addEventListener('click', () => makeItRain('😊'));
         document.getElementById('leaveButton').addEventListener('click', () => makeItRain('😢'));

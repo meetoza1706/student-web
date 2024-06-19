@@ -1,40 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bar Chart Example</title>
-  <!-- Include Tailwind CSS -->
+  <title>Lectures Attendance</title>
+  <!-- Tailwind CSS -->
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- Include ApexCharts -->
+  <!-- ApexCharts -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
-
-<body class="p-6">
-  <div id="chart" class="w-full max-w-lg mx-auto"></div>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+  <div class="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">
+    <h2 class="text-lg font-bold mb-4 text-center">Lectures Attendance</h2>
+    <div id="chart" class="w-full h-96"></div>
+  </div>
 
   <script>
+    // Global variable for total lectures
+    var total_lectures = 30; // Change this value as needed
+
+    // Example data for lectures attended, absent, and late
+    var present_lectures = 20;
+    var absent_lectures = 5;
+    var late_lectures = 5;
+
     var options = {
       series: [{
-        data: [30, 40, 45]
+        name: 'Lectures',
+        data: [present_lectures, absent_lectures, late_lectures]
       }],
       chart: {
+        height: 350,
         type: 'bar',
-        height: 350
+        toolbar: {
+          show: false
+        }
       },
       plotOptions: {
         bar: {
-          horizontal: false,
-          columnWidth: '50%',
-          endingShape: 'rounded'
+          horizontal: true,
+          borderRadius: 4,
+          dataLabels: {
+            position: 'center', // Center-align the data labels
+          },
         },
       },
       dataLabels: {
-        enabled: false
+        enabled: true,
+        style: {
+          fontSize: '12px',
+          colors: ['#304758']
+        }
       },
       xaxis: {
-        categories: ['A', 'B', 'C'],
+        categories: ['Present Lectures', 'Absent Lectures', 'Late Lectures'],
+        labels: {
+          style: {
+            fontSize: '14px'
+          }
+        }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: '12px'
+          }
+        }
+      },
+      title: {
+        text: 'Attendance Overview',
+        align: 'center',
+        margin: 10,
+        offsetX: 0,
+        offsetY: 0,
+        floating: false,
+        style: {
+          fontSize: '16px',
+          fontWeight: 'bold',
+          color: '#263238',
+          textAlign: 'center' // Center align the title text
+        },
       }
     };
 
@@ -42,5 +87,4 @@
     chart.render();
   </script>
 </body>
-
 </html>
