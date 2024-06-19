@@ -173,6 +173,10 @@ def home():
                 print(f"Overall Present percentage: {present_percentage:.2f}%")
                 print(f"Overall Absent percentage: {absent_percentage:.2f}%")
                 print(f"Overall Late percentage: {late_percentage:.2f}%")
+
+                if request.args.get('ajax'):
+                    return jsonify({'present_percent': present_percentage, 'absent_percent': absent_percentage, 'late_percent': late_percentage})
+                
             else:
                 print("No attendance data available.")
         else:

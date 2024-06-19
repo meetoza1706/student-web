@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="static\style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts/dist/apexcharts.min.css">
     <style>
         .radio-red:checked {
             background-color: red;
@@ -79,7 +81,7 @@
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                             href="#">Todo</a></li>
                     <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="#">About us</a></li>
+                            href="#">About</a></li>
                     {% if ausername %}
                     <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar"
                         class="flex text-sm bg-gray-400 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -331,7 +333,11 @@
     </section>
     <section id="stats">
             <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg flex gap-[2%] justify-center items-center">
-            <div>1</div>
+            <div class="container">
+                    <h1 class="text-2xl font-semibold text-gray-800 mb-4">Till now</h1>
+            
+                    <div id="chart"></div>
+            </div>
             <div>2</div>
             <div>3</div>
         </div>
@@ -340,7 +346,75 @@
     <footer id="footer">
         <div class="w-full bg-white text-center text-2xl py-3">Made by Meet Oza</div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script>
+        // Global variables
+        let present_percent;
+        let absent_percent;
+        let late_percent;
+
+        function fetchData() {
+            fetch('/?ajax=1')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Store data in global variables
+                    present_percent = data.present_percent;
+                    absent_percent = data.absent_percent;
+                    late_percent = data.late_percent;
+
+                    // Log all global variables to the console
+                    console.log('Present percent:', present_percent);
+                    console.log('Absent percent:', absent_percent);
+                    console.log('Late percent:', late_percent);
+
+                    // Render the chart with the fetched data
+                    renderChart();
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        function renderChart() {
+            // Check if data has been fetched
+            if (present_percent !== undefined && absent_percent !== undefined && late_percent !== undefined) {
+                // Options for the pie chart
+                const options = {
+                    series: [present_percent, absent_percent, late_percent],  // Data for 3 slices
+                    chart: {
+                        type: 'pie',
+                        height: 350,
+                    },
+                    labels: ['Present', 'Absent', 'Late'],  // Labels for each slice
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200,
+                            },
+                            legend: {
+                                position: 'bottom',
+                            }
+                        }
+                    }]
+                };
+
+                const chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            } else {
+                console.error('Data not loaded yet');
+            }
+        }
+
+        // Fetch data when the page loads
+        window.onload = fetchData;
+    </script>
     <script>
         document.getElementById('presentButton').addEventListener('click', () => makeItRain('😊'));
         document.getElementById('leaveButton').addEventListener('click', () => makeItRain('😢'));
@@ -471,6 +545,7 @@
                 });
             }
         });
+    
     </script>
 </body>
 
