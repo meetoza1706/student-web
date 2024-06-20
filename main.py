@@ -191,9 +191,20 @@ def home():
     else:
         print("No user_id in session.")
 
-
-
     return render_template('index.html', current_lecture=current_lecture, current_class=current_class, timing=timing, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo, schedule=schedule, now=now)
+
+@app.route('/attendance')
+def attendance():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    username = session['username']
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT email, profile_photo FROM user_data WHERE user_id = %s', (user_id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    return render_template('attendance.html', username=username,ausername=username, email = user_data[0], profile_photo=user_data[1])
 
 @app.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
@@ -474,7 +485,7 @@ def logout():
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
     if 'logged_in' not in session:
-        return redirect(url_for('login'))  # Redirect to login page if not logged in
+        return redirect(url_for('login')) 
 
     username = session['username']
     cursor = mysql.connection.cursor()
