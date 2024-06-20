@@ -482,8 +482,8 @@ def reset_password():
                 cursor.close()
                 session.pop('otp', None)
                 session.pop('reset_email', None)
-                msg = 'Password successfully reset.'
-                return render_template('login.html', msg=msg)
+                msg1 = 'Password successfully reset.'
+                return render_template('login.html', msg1=msg1)
             except Exception as e:
                 msg = 'Error resetting password: ' + str(e)
     return render_template('reset_password.html', msg=msg)
