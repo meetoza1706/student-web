@@ -206,6 +206,19 @@ def attendance():
     cursor.close()
     return render_template('attendance.html', username=username,ausername=username, email = user_data[0], profile_photo=user_data[1])
 
+@app.route('/stats')
+def stats():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
+    
+    user_id = session['user_id']
+    username = session['username']
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT email, profile_photo FROM user_data WHERE user_id = %s', (user_id,))
+    user_data = cursor.fetchone()
+    cursor.close()
+    return render_template('stats.html', username=username,ausername=username, email = user_data[0], profile_photo=user_data[1])
+
 @app.route('/mark_attendance', methods=['POST'])
 def mark_attendance():
     data = request.get_json()
