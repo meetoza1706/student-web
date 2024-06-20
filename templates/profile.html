@@ -39,7 +39,7 @@
     </script>
 </head>
 <body class="bg-gray-100">
-    <div class="area h-full">
+    <div class="area h-screen lg:h-full">
         <ul class="circles h-full">
             <li></li>
             <li></li>
@@ -74,26 +74,26 @@
                     </label>
                     <input type="file" id="profile_photo" name="profile_photo" class="hidden" accept="image/*" onchange="previewImage(event)">
                 </div>
-                <div class="flex gap-20">
-                    <div class="w-1/2">
+                <div class="flex lg:flex-row flex-col gap-20">
+                    <div class="w-full lg:w-1/2">
                         <div>
                             <label class="block mb-2 text-blue-500" for="email">Email</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="email" value="{{ email }}" disabled>
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="text" name="email" value="{{ email }}" disabled>
                             <a href="/change_email"><i class="fa-solid fa-pen-to-square"></i></a>
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="f_name">First Name</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="f_name" value="{{ f_name }}" onchange="showSubmitButton()">
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="text" name="f_name" value="{{ f_name }}" onchange="showSubmitButton()">
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="l_name">Last Name</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="text" name="l_name" value="{{ l_name }}" onchange="showSubmitButton()">
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="text" name="l_name" value="{{ l_name }}" onchange="showSubmitButton()">
                         </div>
                     </div>
-                    <div class="w-1/2">
+                    <div class="w-full lg:w-1/2">
                         <div>
                             <label class="block mb-2 text-blue-500" for="current_password">Current Password</label>
-                                <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" value="{{ current_password }}" name="current_password" onchange="showSubmitButton()">
+                                <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="password" value="{{ current_password }}" name="current_password" onchange="showSubmitButton()">
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="new_password">New Password</label>
