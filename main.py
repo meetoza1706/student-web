@@ -347,7 +347,7 @@ def register():
                 session.pop('otp', None)
                 session.pop('user_data', None)
                 msg = 'You have successfully registered!'
-                return render_template('login.html', msg=msg)
+                return render_template('login.html', msg1=msg)
             else:
                 msg = 'Invalid OTP. Please try again.'
                 return render_template('register.html', msg=msg, otp_sent=True)
@@ -549,8 +549,22 @@ def profile():
     user_data = cursor.fetchone()
     cursor.close()
 
+    f_name = user_data[1]
+    print(f_name)
+    if f_name == "Null" or f_name == None:
+        f_name = ''
+
+    l_name = user_data[2]
+    print(l_name)
+    if l_name == "Null" or l_name == None:
+        l_name = ''
+
+    print(f_name)
+    print(l_name)
+    
+    
     # Render the profile page with user data
-    return render_template('profile.html', username=username, email=user_data[0], f_name=user_data[1], l_name=user_data[2], profile_photo=user_data[3])
+    return render_template('profile.html', username=username, email=user_data[0], f_name=f_name, l_name=l_name, profile_photo=user_data[3])
 
 @app.route('/change_email', methods=['GET','POST'])
 def change_email():

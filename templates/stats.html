@@ -41,7 +41,7 @@
 </head>
 
 <body class="bg-[#1f27bf]">
-    <div class="area h-[390%]">
+    <div class="area h-[140%]">
         <ul class="circles h-full">
             <li></li>
             <li></li>
@@ -63,286 +63,283 @@
             <li></li>
         </ul>
     </div>
-    <section id="home my-12">
-        <div class="border-2 border-t-0 w-full m-auto flex border-indigo-800 bg-white">
-            <div class="lg:hidden px-2 flex w-1/3">
-                <i class="fa-solid fa-bars"></i>
-            </div>
-            <div class="flex w-1/3 lg:items-center lg:justify-center">
-                <img class="lg:h-2/3 h-5" src="static\images\web-logo1.png" alt="">
-            </div>
-            <div class="p-6 w-full lg:flex hidden justify-end items-center">
-                <ul class="flex gap-20 font-bold items-center">
-                    <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="/">Home</a></li>
-                    <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="/attendance">Attendance</a></li>
-                    <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="/stats">Stats</a></li>
-                    <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="/todo">Todo</a></li>
-                    <!-- <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="#">About us</a></li> -->
-                    {% if ausername %}
-                    <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar"
-                        class="flex text-sm bg-gray-400 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                        type="button">
-                        <span class="sr-only">Open user menu</span>
-                        {% if profile_photo %}
-                        <img src="{{ url_for('static', filename='images/profile_uploads/' + profile_photo) }}"
-                            class="rounded-full h-12 w-12 object-cover" alt="Profile Photo" id="profilePhotoPreview">
-                        {% else %}
-                        <div class="w-12 h-12 rounded-full profile-placeholder flex justify-center"
-                            id="profilePhotoPlaceholder">
-                            <p class="mt-3">{{ username[0] }}</p>
-                        </div>
-                        <img id="profilePhotoPreview" class="rounded-full h-48 w-48 object-cover"
-                            style="display: none;">
-                        {% endif %}
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div id="dropdownAvatar"
-                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-                        <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                            <div>{{ausername}}</div>
-                            <div class="font-medium truncate">{{email}}</div>
-                        </div>
-                        <div class="py-2">
-                            <a href="/profile"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</a>
-                            <a href="/logout"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Log
-                                out</a>
-                        </div>
-                    </div>
-                    {% else %}
-                    <li><a id="account"
-                            class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                            href="/login">login</a></li>
-                    {% endif %}
-                </ul>
-            </div>
+    <div class="border-2 border-t-0 w-full m-auto flex border-indigo-800 bg-white py-3 px-10">
+        <div class="lg:hidden px-2 flex w-1/3">
+            <i class="fa-solid fa-bars"></i>
         </div>
-        <section id="stats">
-            <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg  gap-[2%] justify-center">
-                <div class="container mx-auto p-8">
-                    <div class="bg-white shadow-md rounded-lg p-8 mb-8">
-                        <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Chart 1</h2>
-                        <div id="chart1" class="w-full h-96"></div>
+        <div class="flex  lg:items-center lg:justify-start">
+            <img class="w-[65%]" src="static\images\web-logo1.png" alt="">
+        </div>
+        <div class=" w-full lg:flex hidden justify-end items-center">
+            <ul class="flex gap-12 font-bold items-center">
+                <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                        href="/">Home</a></li>
+                <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                        href="/attendance">Attendance</a></li>
+                <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                        href="/stats">Stats</a></li>
+                <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                        href="/todo">Todo</a></li>
+                <!-- <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                        href="">About us</a></li> -->
+                {% if ausername %}
+                <button id="dropdownUserAvatarButton" data-dropdown-toggle="dropdownAvatar"
+                    class="flex text-sm bg-gray-400 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                    type="button">
+                    <span class="sr-only">Open user menu</span>
+                    {% if profile_photo %}
+                    <img src="{{ url_for('static', filename='images/profile_uploads/' + profile_photo) }}"
+                        class="rounded-full h-12 w-12 object-cover" alt="Profile Photo" id="profilePhotoPreview">
+                    {% else %}
+                    <div class="w-10 h-10 rounded-full profile-placeholder flex justify-center items-center"
+                        id="profilePhotoPlaceholder">
+                        <p class="mb-1 capitalize text-2xl">{{ username[0] }}</p>
                     </div>
-                    <div class="bg-white shadow-md rounded-lg p-8 mb-8">
-                        <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Chart 2</h2>
-                        <div id="chart2" class="w-full h-96"></div>
+                    <img id="profilePhotoPreview" class="rounded-full h-48 w-48 object-cover" style="display: none;">
+                    {% endif %}
+                </button>
+                <!-- Dropdown menu -->
+                <div id="dropdownAvatar"
+                    class="z-10 hidden  divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+                    <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                        <div>{{ausername}}</div>
+                        <div class="font-medium truncate">{{email}}</div>
                     </div>
-                    <div class="bg-white shadow-md rounded-lg p-8">
-                        <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Bar Chart</h2>
-                        <div id="chart3" class="w-full h-96"></div>
+                    <div class="py-2">
+                        <a href="/profile"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profile</a>
+                        <a href="/logout"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Log
+                            out</a>
                     </div>
                 </div>
+                {% else %}
+                <li><a id="account" class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                        href="/login">login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <section id="stats">
+        <div class="bg-white p-6 my-12 w-[70%] m-auto rounded-lg  gap-[2%] justify-center">
+            <div class="container mx-auto p-8">
+                <div class="bg-white shadow-md rounded-lg p-8 mb-8">
+                    <h2 class="text-lg font-bold mb-4 text-center">attendance till now</h2>
+                    <div id="chart1" class="w-full h-96"></div>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-8 mb-8">
+                    <h2 class="text-lg font-bold mb-4 text-center">attendance till next unit-test</h2>
+                    <div id="chart2" class="w-full h-96"></div>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-8">
+                    <h2 class="text-lg font-bold mb-4 text-center">Lecture Attendance Bar Chart</h2>
+                    <div id="chart3" class="w-full h-96"></div>
+                </div>
             </div>
-        </section>
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-        <script>
-            // Global variables
-            let present_percent;
-            let absent_percent;
-            let late_percent;
-            let a_present_percent;
-            let a_absent_percent;
-            let a_late_percent;
-            let remaining;
-            let late_lectures;
-            let present_lectures;
-            let absent_lectures;
-            let total_lectures;
-        
-            function fetchData() {
-                fetch('/?ajax=1')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok ' + response.statusText);
+        </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script>
+        // Global variables
+        let present_percent;
+        let absent_percent;
+        let late_percent;
+        let a_present_percent;
+        let a_absent_percent;
+        let a_late_percent;
+        let remaining;
+        let late_lectures;
+        let present_lectures;
+        let absent_lectures;
+        let total_lectures;
+
+        function fetchData() {
+            fetch('/?ajax=1')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Store data in global variables
+                    present_percent = data.present_percent;
+                    absent_percent = data.absent_percent;
+                    late_percent = data.late_percent;
+                    a_present_percent = data.a_present_percent;
+                    a_absent_percent = data.a_absent_percent;
+                    a_late_percent = data.a_late_percent;
+                    remaining = data.remaining;
+                    late_lectures = data.late_lectures;
+                    present_lectures = data.present_lectures;
+                    absent_lectures = data.absent_lectures;
+                    total_lectures = data.total_lectures;
+
+                    // Log all global variables to the console
+                    console.log('Present:', present_lectures);
+                    console.log('absent:', absent_lectures);
+                    console.log('late:', late_lectures);
+                    console.log('total:', total_lectures);
+
+                    // Render the charts with the fetched data
+                    renderChart1();
+                    renderChart2();
+                    renderChart3();  // Render third chart after data fetch
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                });
+        }
+
+        function renderChart1() {
+            // Check if data has been fetched
+            if (present_percent !== undefined && absent_percent !== undefined && late_percent !== undefined) {
+                // Define colors for slices
+                const colors = ['#1fab1f', '#ff0000', '#ffa500'];
+
+                // Options for the pie chart 1
+                const options1 = {
+                    series: [present_percent, absent_percent, late_percent],  // Data for 3 slices
+                    chart: {
+                        type: 'pie',
+                        height: 350,
+                    },
+                    labels: ['Present', 'Absent', 'Late'],  // Labels for each slice
+                    colors: colors,  // Custom colors for slices
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200,
+                            },
+                            legend: {
+                                position: 'bottom',
+                            }
                         }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Store data in global variables
-                        present_percent = data.present_percent;
-                        absent_percent = data.absent_percent;
-                        late_percent = data.late_percent;
-                        a_present_percent = data.a_present_percent;
-                        a_absent_percent = data.a_absent_percent;
-                        a_late_percent = data.a_late_percent;
-                        remaining = data.remaining;
-                        late_lectures = data.late_lectures;
-                        present_lectures = data.present_lectures;
-                        absent_lectures = data.absent_lectures;
-                        total_lectures = data.total_lectures;
-        
-                        // Log all global variables to the console
-                        console.log('Present:', present_lectures);
-                        console.log('absent:', absent_lectures);
-                        console.log('late:', late_lectures);
-                        console.log('total:', total_lectures);
-        
-                        // Render the charts with the fetched data
-                        renderChart1();
-                        renderChart2();
-                        renderChart3();  // Render third chart after data fetch
-                    })
-                    .catch(error => {
-                        console.error('Fetch error:', error);
-                    });
+                    }]
+                };
+
+                const chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
+                chart1.render();
+            } else {
+                console.error('Data not loaded yet for chart 1');
             }
-        
-            function renderChart1() {
-                // Check if data has been fetched
-                if (present_percent !== undefined && absent_percent !== undefined && late_percent !== undefined) {
-                    // Define colors for slices
-                    const colors = ['#1fab1f', '#ff0000', '#ffa500'];
-            
-                    // Options for the pie chart 1
-                    const options1 = {
-                        series: [present_percent, absent_percent, late_percent],  // Data for 3 slices
-                        chart: {
-                            type: 'pie',
-                            height: 350,
-                        },
-                        labels: ['Present', 'Absent', 'Late'],  // Labels for each slice
-                        colors: colors,  // Custom colors for slices
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: 200,
-                                },
-                                legend: {
-                                    position: 'bottom',
-                                }
+        }
+
+        function renderChart2() {
+            // Check if data has been fetched
+            if (a_present_percent !== undefined && a_absent_percent !== undefined && a_late_percent !== undefined && remaining !== undefined) {
+                // Define colors for slices
+                const colors = ['#1fab1f', '#ff0000', '#ffa500', '#cccccc'];
+
+                // Options for the pie chart 2
+                const options2 = {
+                    series: [a_present_percent, a_absent_percent, a_late_percent, remaining],  // Data for 4 slices
+                    chart: {
+                        type: 'pie',
+                        height: 350,
+                    },
+                    labels: ['Present', 'Absent', 'Late', 'Remaining'],  // Labels for each slice
+                    colors: colors,  // Custom colors for slices
+                    responsive: [{
+                        breakpoint: 480,
+                        options: {
+                            chart: {
+                                width: 200,
+                            },
+                            legend: {
+                                position: 'bottom',
                             }
-                        }]
-                    };
-            
-                    const chart1 = new ApexCharts(document.querySelector("#chart1"), options1);
-                    chart1.render();
-                } else {
-                    console.error('Data not loaded yet for chart 1');
-                }
+                        }
+                    }]
+                };
+
+                const chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
+                chart2.render();
+            } else {
+                console.error('Data not loaded yet for chart 2');
             }
-            
-            function renderChart2() {
-                // Check if data has been fetched
-                if (a_present_percent !== undefined && a_absent_percent !== undefined && a_late_percent !== undefined && remaining !== undefined) {
-                    // Define colors for slices
-                    const colors = ['#1fab1f', '#ff0000', '#ffa500', '#cccccc'];
-            
-                    // Options for the pie chart 2
-                    const options2 = {
-                        series: [a_present_percent, a_absent_percent, a_late_percent, remaining],  // Data for 4 slices
-                        chart: {
-                            type: 'pie',
-                            height: 350,
-                        },
-                        labels: ['Present', 'Absent', 'Late', 'Remaining'],  // Labels for each slice
-                        colors: colors,  // Custom colors for slices
-                        responsive: [{
-                            breakpoint: 480,
-                            options: {
-                                chart: {
-                                    width: 200,
-                                },
-                                legend: {
-                                    position: 'bottom',
-                                }
-                            }
-                        }]
-                    };
-            
-                    const chart2 = new ApexCharts(document.querySelector("#chart2"), options2);
-                    chart2.render();
-                } else {
-                    console.error('Data not loaded yet for chart 2');
-                }
-            }
-    
-            function renderChart3() {
-                // Check if data has been fetched
-                if (present_lectures !== undefined && absent_lectures !== undefined && late_lectures !== undefined) {
-                    const options3 = {
-                        series: [{
-                            name: 'Lectures',
-                            data: [present_lectures, absent_lectures, late_lectures]
-                        }],
-                        chart: {
-                            height: 350,
-                            type: 'bar',
-                            toolbar: {
-                                show: false
-                            }
-                        },
-                        plotOptions: {
-                            bar: {
-                                horizontal: true,
-                                borderRadius: 4,
-                                dataLabels: {
-                                    position: 'center', // Center-align the data labels
-                                },
+        }
+
+        function renderChart3() {
+            // Check if data has been fetched
+            if (present_lectures !== undefined && absent_lectures !== undefined && late_lectures !== undefined) {
+                const options3 = {
+                    series: [{
+                        name: 'Lectures',
+                        data: [present_lectures, absent_lectures, late_lectures]
+                    }],
+                    chart: {
+                        height: 350,
+                        type: 'bar',
+                        toolbar: {
+                            show: false
+                        }
+                    },
+                    plotOptions: {
+                        bar: {
+                            horizontal: true,
+                            borderRadius: 4,
+                            dataLabels: {
+                                position: 'center', // Center-align the data labels
                             },
                         },
-                        dataLabels: {
-                            enabled: true,
-                            style: {
-                                fontSize: '12px',
-                                colors: ['#304758']
-                            }
-                        },
-                        xaxis: {
-                            categories: ['Present Lectures', 'Absent Lectures', 'Late Lectures'],
-                            labels: {
-                                style: {
-                                    fontSize: '14px'
-                                }
-                            }
-                        },
-                        yaxis: {
-                            labels: {
-                                style: {
-                                    fontSize: '12px'
-                                }
-                            }
-                        },
-                        title: {
-                            text: 'Attendance Overview',
-                            align: 'center',
-                            margin: 10,
-                            offsetX: 0,
-                            offsetY: 0,
-                            floating: false,
-                            style: {
-                                fontSize: '16px',
-                                fontWeight: 'bold',
-                                color: '#263238'
-                            },
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        style: {
+                            fontSize: '12px',
+                            colors: ['#304758']
                         }
-                    };
-            
-                    const chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
-                    chart3.render();
-                } else {
-                    console.error('Data not loaded yet for chart 3');
-                }
+                    },
+                    xaxis: {
+                        categories: ['Present Lectures', 'Absent Lectures', 'Late Lectures'],
+                        labels: {
+                            style: {
+                                fontSize: '14px'
+                            }
+                        }
+                    },
+                    yaxis: {
+                        labels: {
+                            style: {
+                                fontSize: '12px'
+                            }
+                        }
+                    },
+                    title: {
+                        text: 'Attendance Overview',
+                        align: 'center',
+                        margin: 10,
+                        offsetX: 0,
+                        offsetY: 0,
+                        floating: false,
+                        style: {
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            color: '#263238'
+                        },
+                    }
+                };
+
+                const chart3 = new ApexCharts(document.querySelector("#chart3"), options3);
+                chart3.render();
+            } else {
+                console.error('Data not loaded yet for chart 3');
             }
-    
-            // Render charts when the page loads
-            document.addEventListener('DOMContentLoaded', function() {
-                renderChart1();
-                renderChart2();
-                renderChart3(); // Render third chart initially with default values
-            });
-        
-            // Fetch data when the page loads
-            window.onload = fetchData;
-        </script>
+        }
+
+        // Render charts when the page loads
+        document.addEventListener('DOMContentLoaded', function () {
+            renderChart1();
+            renderChart2();
+            renderChart3(); // Render third chart initially with default values
+        });
+
+        // Fetch data when the page loads
+        window.onload = fetchData;
+    </script>
 </body>
 
 </html>
