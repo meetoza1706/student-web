@@ -70,8 +70,7 @@
         <nav class="bg-white border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap items-center bg-white justify-between mx-auto p-4">
                 <a href="javascript:void(0)" class="flex items-center space-x-3 rtl:space-x-reverse">
-                    <img src="static/images/web-logo3.png" class="h-8" alt="Flowbite Logo" />
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
+                    <img src="static/images/web-logo3.png" class="h-8" alt="StudyMate Logo" />
                 </a>
                 <button data-collapse-toggle="navbar-default" type="button"
                     class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -90,9 +89,9 @@
                         <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                                 href="/attendance">Attendance</a></li>
                         <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                                href="/stats">Stats</a></li>
-                        <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
-                                href="/todo">Todo</a></li>
+                nb                href="/stats">Stats</a></li>
+                        <!-- <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
+                                href="/todo">Todo</a></li> -->
                         <!-- <li><a class="hover:text-gray-500 ease-in-out text-black duration-300 no-underline text-xl"
                                 href="">About us</a></li> -->
                         {% if ausername %}
@@ -137,29 +136,28 @@
             </div>
         </nav>
 
-        <div class="flex flex-col m-auto rounded-xl text-center bg-transparent w-[70%]  my-14">
-            <!-- <div class="bg-gradient-to-r from-gray-600 to-white text-transparent bg-clip-text"> -->
-            <div class="text-white text-transparent bg-clip-text">
+        <div class="flex flex-col m-auto rounded-xl text-center bg-opacity-80  w-[70%] bg-white my-14">
+            <div class="bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-800 text-transparent bg-clip-text">
                 <h1 class="h-full lg:text-6xl text-5xl py-4">{{greeting}}</h1>
             </div>
             <div class="">
-                <h4 class="lg:text-4xl  text-white text-3xl border-b-2 pb-10">@{{username}}</h4>
+                <h4 class="lg:text-4xl italic text-gray-900 text-3xl border-b-2 pb-10">@{{username}}</h4>
             </div>
             <div>
-                <h4 class="text-2xl pt-10  text-white">IT-4C</h4>
+                <h4 class="text-2xl pt-10 ">IT-4C</h4>
             </div>
             {% if current_lecture %}
             <div>
                 <p class="text-base text-gray-400 pt-1">Current lecture:</p>
             </div>
             <div>
-                <h1 class="text-6xl pt-1 text-white">{{current_lecture}}</h1>
+                <h1 class="text-6xl pt-1">{{current_lecture}}</h1>
             </div>
             <div>
-                <h2 class="text-4xl pt-2 text-white">{{current_class}}</h2>
+                <h2 class="text-4xl pt-2">{{current_class}}</h2>
             </div>
             <div>
-                <h3 class="text-xl pt-2 pb-10 text-white">{{timing}}</h3>
+                <h3 class="text-xl pt-2 pb-10">{{timing}}</h3>
             </div>
             {% else %}
             <div>
