@@ -110,14 +110,17 @@ def get_current_lecture_and_class(schedule):
             timing = "Enjoy your off time :)"
     else:
         current_lecture = "Enjoy the day off mate 😁"
-        current_class = "    "
-        timing = ""
+        current_class = "no classes just relax!!"
+        timing = "Enjoy your off time :)"
 
     return current_lecture, current_class, timing
 
 @app.route('/')
 def home():
     current_lecture, current_class, timing = get_current_lecture_and_class(schedule)
+    print(current_class)
+    print(current_lecture)
+    print(timing)
 
     now = datetime.now()
     if 5 <= now.hour < 12:
