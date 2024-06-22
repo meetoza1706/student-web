@@ -39,7 +39,7 @@
     </script>
 </head>
 <body class="bg-gray-100">
-    <div class="area h-screen lg:h-full">
+    <div class="area h-[162%] lg:h-full">
         <ul class="circles h-full">
             <li></li>
             <li></li>
@@ -60,7 +60,7 @@
         </ul>
     </div>
     <div class="flex justify-center items-center h-screen">
-        <div class="w-[80%] bg-blue-100 rounded p-5">
+        <div class="w-[80%] bg-blue-100 rounded p-5 lg:mt-0 mt-[70%]">
             <form method="POST" action="/profile" enctype="multipart/form-data">
                 <div class="w-full flex justify-center items-center mb-4 gap-[2%]">
                     {% if profile_photo %}
@@ -87,7 +87,8 @@
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="l_name">Last Name</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="text" name="l_name" value="{{ l_name }}" onchange="showSubmitButton()">
+                            <input class="p-2
+                             text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="text" name="l_name" value="{{ l_name }}" onchange="showSubmitButton()">
                         </div>
                     </div>
                     <div class="w-full lg:w-1/2">
@@ -97,16 +98,16 @@
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="new_password">New Password</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="new_password" value="{{ new_password }}" onchange="showSubmitButton()">
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="password" name="new_password" value="{{ new_password }}" onchange="showSubmitButton()">
                         </div>
                         <div>
                             <label class="block mb-2 text-blue-500" for="c_new_password">Confirm New Password</label>
-                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-[90%]" type="password" name="c_new_password" value="{{ c_new_password }}" onchange="showSubmitButton()">
+                            <input class="p-2 mb-6 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300 w-full lg:w-[90%]" type="password" name="c_new_password" value="{{ c_new_password }}" onchange="showSubmitButton()">
                         </div>
                     </div>
                 </div>
                 <div class="flex flex-col justify-center items-center mt-5">
-                    <button class="w-[20%] bg-blue-700 hover:bg-pink-700 text-white font-bold py-2 px-4 mb-6 rounded" type="submit" id="submitButton" style="display: none;">Submit Changes</button>
+                    <button class="lg:w-[20%] w-[80%] bg-blue-700 hover:bg-pink-700 text-white font-bold py-1 px-8 lg:py-2 lg:px-4 mb-6 rounded" type="submit" id="submitButton" style="display: none;">Submit Changes</button>
                     <a class="text-blue-700 hover:text-pink-700 text-sm float-left" href="/">Back to home</a>
                 </div>
             </form>

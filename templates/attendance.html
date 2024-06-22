@@ -412,7 +412,7 @@
             console.log('Total Present:', present);
             console.log('Total Absent:', absent);
             console.log('Total Late:', late);
-
+            let trimmedResponse = "";
             $.ajax({
                 url: '/c_attendance',
                 type: 'POST',
@@ -425,7 +425,8 @@
                 success: function (response) {
                     response = JSON.stringify(response).trim()
                     console.log(response)
-                    document.getElementById('msg').innerHTML = response
+                    trimmedResponse = response.slice(1, -1);
+                    document.getElementById('msg').innerHTML = trimmedResponse
                 },
                 error: function (error) {
                     console.error(error);
