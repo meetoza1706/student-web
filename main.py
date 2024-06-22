@@ -6,7 +6,6 @@ from datetime import datetime, timedelta, date
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session
 import random
-import random
 import os
 import smtplib
 from email.mime.multipart import MIMEMultipart

@@ -1,1 +1,6 @@
-ng, greeting=greeting, username=username, ausername=ausername, email=email, profile_photo=profile_photo, schedule=schedule, now=now)
+
+import bcrypt
+from flask_bcrypt import Bcrypt
+
+app = Flask(__name__)
+app.secret_key = 'meet'
