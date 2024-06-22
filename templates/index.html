@@ -136,12 +136,12 @@
             </div>
         </nav>
 
-        <div class="flex flex-col m-auto rounded-xl text-center bg-opacity-80  w-[70%] bg-white my-14">
+        <div class="flex flex-col m-auto rounded-xl text-center bg-opacity-80  lg:w-[70%] w-[80%] bg-white my-14">
             <div class="bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-800 text-transparent bg-clip-text">
-                <h1 class="h-full lg:text-6xl text-5xl py-4">{{greeting}}</h1>
+                <h1 class="h-full lg:text-6xl text-3xl py-4">{{greeting}}</h1>
             </div>
             <div class="">
-                <h4 class="lg:text-4xl italic text-gray-900 text-3xl border-b-2 pb-10">@{{username}}</h4>
+                <h4 class="lg:text-4xl italic text-gray-900 text-2xl border-b-2 pb-10">@{{username}}</h4>
             </div>
             <div>
                 <h4 class="text-2xl pt-10 ">IT-4C</h4>
@@ -151,26 +151,26 @@
                 <p class="text-base text-gray-400 pt-1">Current lecture:</p>
             </div>
             <div>
-                <h1 class="text-6xl pt-1">{{current_lecture}}</h1>
+                <h1 class="lg:text-6xl text-3xl pt-1">{{current_lecture}}</h1>
             </div>
             <div>
-                <h2 class="text-4xl pt-2">{{current_class}}</h2>
+                <h2 class="lg:text-4xl text-xl pt-2">{{current_class}}</h2>
             </div>
             <div>
-                <h3 class="text-xl pt-2 pb-10">{{timing}}</h3>
+                <h3 class="lg:text-xl text-lg  pt-2 pb-10">{{timing}}</h3>
             </div>
             {% else %}
             <div>
-                <p class=" text-gray-400 text-xl pt-1">Current lecture:</p>
+                <p class=" text-gray-400 lg:text-xl text-lg pt-1">Current lecture:</p>
             </div>
             <div>
-                <h1 class="text-4xl pt-1">No lectures going on right now 😁</h1>
+                <h1 class="lg:text-4xl text-xl pt-1">No lectures going on right now 😁</h1>
             </div>
             <div>
-                <h2 class="text-2xl pt-2">No classes, just relax!!</h2>
+                <h2 class="lg:text-2xl text-xl pt-2">No classes, just relax!!</h2>
             </div>
             <div>
-                <h3 class="text-xl pt-2 pb-10">Enjoy your off time :)</h3>
+                <h3 class="lg:text-xl text-lg pt-2 pb-10">Enjoy your off time :)</h3>
             </div>
             {% endif %}
         </div>
