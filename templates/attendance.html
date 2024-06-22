@@ -294,7 +294,7 @@
                         </form>
                         <button onclick="calculateAttendance()" class="ml-[35%] w-[20%] bg-blue-500"
                             id="submitButton">submit</button>
-                        <p class="msg"></p>
+                        <p id="msg" class="text-center text-white"></p>
                         <!-- Modal body -->
                     </div>
                 </div>
@@ -423,8 +423,9 @@
                     late: late
                 }),
                 success: function (response) {
-                    response = JSON.stringify(response)
+                    response = JSON.stringify(response).trim()
                     console.log(response)
+                    document.getElementById('msg').innerHTML = response
                 },
                 error: function (error) {
                     console.error(error);
