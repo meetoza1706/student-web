@@ -641,9 +641,9 @@ def verify_email():
 
     return render_template('verify_email.html', msg=msg)
 
-@app.route('/XADMIN')
+@app.route('/XA')
 def XADMIN():
-    return render_template('XADMIN.html')
+    return render_template('XA.html')
     
 @app.route('/XOM', methods=['POST'])
 def XOM():

@@ -8,12 +8,11 @@ function login() {
         contentType: 'application/json',
         data: JSON.stringify({username: username, password: password}),
         success: function(response) {
-            // Handle successful response
-            alert("Login successful!");
+            console.log('b')
+            document.getElementById('control').style.display = 'none';
         },
         error: function(error) {
-            // Handle error response
-            alert("Login failed!");
+            console.log('a')
         }
     });
 }
