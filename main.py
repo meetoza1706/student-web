@@ -432,15 +432,6 @@ def login():
 
     return render_template('login.html', msg=msg)
     
-
-@app.route('/dashboard')
-def dashboard():
-    if 'logged_in' in session:
-        username = session['username']
-        return f'Welcome, {username}! This is your dashboard.'
-    else:
-        return redirect(url_for('login'))
-
 @app.route('/forgot', methods=['GET', 'POST'])
 def forgot_password():
     msg = ''
@@ -650,9 +641,23 @@ def verify_email():
 
     return render_template('verify_email.html', msg=msg)
 
-@app.route('/test')
-def test():
-    return render_template('test.html')
+@app.route('/XADMIN')
+def XADMIN():
+    return render_template('XADMIN.html')
+    
+@app.route('/XOM', methods=['POST'])
+def XOM():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+
+    # Add your authentication logic here
+    if username == "XMEET" and password == "XOMMEET":  # Example check
+        return jsonify({'message': 'Login successful!'}), 200
+        # continue the further code here
+    else:
+        return jsonify({'message': 'Invalid username or password'}), 401
+
 
 if __name__ == '__main__':
     app.run(debug=True)
