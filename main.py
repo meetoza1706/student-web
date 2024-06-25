@@ -47,6 +47,8 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 last_attendb_dates = None
+unit_test_result = False
+toggle_disabled = False
 
 # Schedule dictionary
 schedule = {
@@ -643,7 +645,7 @@ def verify_email():
 
 @app.route('/XA')
 def XADMIN():
-    return render_template('XA.html')
+    return render_template('XA.html', toggle_disabled=toggle_disabled)
     
 @app.route('/XOM', methods=['POST'])
 def XOM():
@@ -658,6 +660,23 @@ def XOM():
     else:
         return jsonify({'message': 'Invalid username or password'}), 401
 
+@app.route('/toggle')
+def toggle():
+    global unit_test_result, toggle_disabled
+    unit_test_result = not unit_test_result
+    toggle_disabled = False  # Enable the button after toggle
+    return None
+
+@app.route('/disable-toggle')
+def disable_toggle():
+    global toggle_disabled
+    toggle_disabled = True  # Disable button
+    return None
+
+@app.route('/unit_test')
+def unit_test():
+    global unit_test_result
+    return render_template('unit.html', unit_test_result=unit_test_result)
 
 if __name__ == '__main__':
     app.run(debug=True)
