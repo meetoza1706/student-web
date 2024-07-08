@@ -18,36 +18,36 @@ function login() {
         }
     });
 }
-function toggleUnitTest() {
-    fetch('/toggle')  // Sends a request to Flask route '/toggle'
-        .then(response => {
-            if (response.ok) {
-                return response.text();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(result => {
-            console.log(result);  // Optional: Log success message
-            document.getElementById('toggleButton').disabled = true;  // Disable the toggle button after toggling
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+// function toggleUnitTest() {
+//     fetch('/toggle')  // Sends a request to Flask route '/toggle'
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.text();
+//             }
+//             throw new Error('Network response was not ok.');
+//         })
+//         .then(result => {
+//             console.log(result);  // Optional: Log success message
+//             document.getElementById('toggleButton').disabled = true;  // Disable the toggle button after toggling
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
 
-function disableToggle() {
-    fetch('/disable-toggle')  // Sends a request to Flask route '/disable-toggle'
-        .then(response => {
-            if (response.ok) {
-                return response.text();
-            }
-            throw new Error('Network response was not ok.');
-        })
-        .then(result => {
-            console.log(result);  // Optional: Log success message
-            document.getElementById('toggleButton').disabled = true;  // Disable the toggle button
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+// function disableToggle() {
+//     fetch('/disable-toggle')  // Sends a request to Flask route '/disable-toggle'
+//         .then(response => {
+//             if (response.ok) {
+//                 return response.text();
+//             }
+//             throw new Error('Network response was not ok.');
+//         })
+//         .then(result => {
+//             console.log(result);  // Optional: Log success message
+//             document.getElementById('toggleButton').disabled = true;  // Disable the toggle button
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }

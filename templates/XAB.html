@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Student Web</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/a7ad42ee25.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Add jQuery CDN -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="bg-gray-100">
+    <div class="area h-screen">
+        <ul class="circles h-screen">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <div>
+        <button onclick="sendResponse()" class="w-[40%] m-auto">
+            Press Here
+        </button>
+        <button onclick="sendResponse2()" class="w-[40%] m-auto">
+            Press Here for Response 2
+        </button>
+    </div>
+    <script>
+        function sendResponse(){
+            $.ajax({
+                url: '/XA',
+                type: 'POST',
+                data: {
+                    buttonResponse: '0'           
+                },
+                success: function(response) {
+                    console.log('Success:', response);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+
+        function sendResponse2(){
+            $.ajax({
+                url: '/XA',
+                type: 'POST',
+                data: {
+                    responseButton2: '1'           
+                },
+                success: function(response) {
+                    console.log('Success:', response);
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

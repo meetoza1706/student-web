@@ -47,8 +47,6 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 last_attendb_dates = None
-unit_test_result = False
-toggle_disabled = False
 
 # Schedule dictionary
 schedule = {
@@ -643,40 +641,46 @@ def verify_email():
 
     return render_template('verify_email.html', msg=msg)
 
-@app.route('/XA')
-def XADMIN():
-    return render_template('XA.html', toggle_disabled=toggle_disabled)
-    
-@app.route('/XOM', methods=['POST'])
-def XOM():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
+@app.route('/XA', methods=['POST', 'GET'])
+def XA():
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT username, password FROM admin')
+    account = cursor.fetchone()
+    cursor.close()
+    if account:
+        username = account[0]
+        password = account[1]
+        print(username)
+        print(password)
 
-    # Add your authentication logic here
-    if username == "XMEET" and password == "XOMMEET":  # Example check
-        return jsonify({'message': 'Login successful!'}), 200
-        # continue the further code here
-    else:
-        return jsonify({'message': 'Invalid username or password'}), 401
+    if request.method == 'POST':
+        Fusername = request.form.get('username')
+        Fpassword = request.form.get('password')
+        buttonResponse = request.form.get('buttonResponse')
+        responseButton2 = request.form.get('responseButton2')
+        
+        # Check if this is an AJAX request for buttonResponse
+        if buttonResponse is not None:
+            print(buttonResponse)
+            return jsonify({'message': 'Button response received', 'buttonResponse': buttonResponse})
 
-@app.route('/toggle')
-def toggle():
-    global unit_test_result, toggle_disabled
-    unit_test_result = not unit_test_result
-    toggle_disabled = False  # Enable the button after toggle
-    return None
+        # Check if this is an AJAX request for responseButton2
+        if responseButton2 is not None:
+            print(responseButton2)
+            return jsonify({'message': 'Response button 2 received', 'responseButton2': responseButton2})
 
-@app.route('/disable-toggle')
-def disable_toggle():
-    global toggle_disabled
-    toggle_disabled = True  # Disable button
-    return None
+        # Regular authentication process
+        print(Fusername)
+        print(Fpassword)
+        if Fusername == username and Fpassword == password:
+            return render_template('XAB.html')
+
+    return render_template('XA.html')
 
 @app.route('/unit_test')
 def unit_test():
-    global unit_test_result
-    return render_template('unit.html', unit_test_result=unit_test_result)
+
+    return render_template('unit.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
