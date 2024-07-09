@@ -684,8 +684,12 @@ def XA():
 
 @app.route('/unit_test')
 def unit_test():
-
-    return render_template('unit.html')
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT unit_status FROM admin')
+    account = cursor.fetchone()
+    portal = account[0]
+    print(portal)
+    return render_template('unit.html', portal=portal)
 
 if __name__ == '__main__':
     app.run(debug=True)
