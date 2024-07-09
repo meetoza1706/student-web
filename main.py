@@ -646,7 +646,7 @@ def XA():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT username, password FROM admin')
     account = cursor.fetchone()
-    cursor.close()
+    
     if account:
         username = account[0]
         password = account[1]
@@ -662,11 +662,15 @@ def XA():
         # Check if this is an AJAX request for buttonResponse
         if buttonResponse is not None:
             print(buttonResponse)
+            cursor.execute('UPDATE admin SET unit_status = %s', (buttonResponse,))
+            mysql.connection.commit()  # Commit the transaction
             return jsonify({'message': 'Button response received', 'buttonResponse': buttonResponse})
 
         # Check if this is an AJAX request for responseButton2
         if responseButton2 is not None:
             print(responseButton2)
+            cursor.execute('UPDATE admin SET unit_status = %s', (responseButton2,))
+            mysql.connection.commit()  # Commit the transaction
             return jsonify({'message': 'Response button 2 received', 'responseButton2': responseButton2})
 
         # Regular authentication process
@@ -674,8 +678,9 @@ def XA():
         print(Fpassword)
         if Fusername == username and Fpassword == password:
             return render_template('XAB.html')
-
+        cursor.close()
     return render_template('XA.html')
+
 
 @app.route('/unit_test')
 def unit_test():
