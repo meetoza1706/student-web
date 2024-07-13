@@ -600,14 +600,12 @@ def new_email():
         if account:
             msg = 'Email already exists!'
         else:
-            # Generate and send OTP to the new email
             otp = generate_otp()
             if send_email(new_email, otp):
-                session['otp'] = otp  # Store the OTP in the session
-                session['new_email'] = new_email  # Store the new email in the session
+                session['otp'] = otp  
+                session['new_email'] = new_email  
                 msg = 'OTP has been sent to your new email. Please verify.'
-                return render_template('verify_email.html', msg=msg)  # Redirect to OTP verification page
-            else:
+                return render_template('verify_email.html', msg=msg)  
                 msg = 'Failed to send OTP. Please try again.'
     
     return render_template('new_email.html', msg=msg)
@@ -624,7 +622,6 @@ def verify_email():
     if request.method == 'POST':
         otp = request.form['otp']
         
-        # Verify OTP
         if otp == session.get('otp'):
             new_email = session.get('new_email')
             if new_email:
@@ -633,8 +630,8 @@ def verify_email():
                 mysql.connection.commit()
                 cursor.close()
                 msg = 'Email has been changed.'
-                session.pop('otp', None)  # Clear the OTP from session
-                session.pop('new_email', None)  # Clear the new email from session
+                session.pop('otp', None)
+                session.pop('new_email', None)
                 return redirect(url_for('profile'))
         else:
             msg = 'Invalid OTP. Please try again.'
@@ -659,21 +656,18 @@ def XA():
         buttonResponse = request.form.get('buttonResponse')
         responseButton2 = request.form.get('responseButton2')
         
-        # Check if this is an AJAX request for buttonResponse
         if buttonResponse is not None:
             print(buttonResponse)
             cursor.execute('UPDATE admin SET unit_status = %s', (buttonResponse,))
-            mysql.connection.commit()  # Commit the transaction
+            mysql.connection.commit()  
             return jsonify({'message': 'Button response received', 'buttonResponse': buttonResponse})
 
-        # Check if this is an AJAX request for responseButton2
         if responseButton2 is not None:
             print(responseButton2)
             cursor.execute('UPDATE admin SET unit_status = %s', (responseButton2,))
-            mysql.connection.commit()  # Commit the transaction
+            mysql.connection.commit()  
             return jsonify({'message': 'Response button 2 received', 'responseButton2': responseButton2})
-
-        # Regular authentication process
+        
         print(Fusername)
         print(Fpassword)
         if Fusername == username and Fpassword == password:
@@ -682,20 +676,37 @@ def XA():
     return render_template('XA.html')
 
 
-@app.route('/unit_test', methods=['POST','GET'])
+@app.route('/unit_test', methods=['POST', 'GET'])
 def unit_test():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT unit_status FROM admin')
     account = cursor.fetchone()
     portal = account[0]
-    print(portal)
-    ETT = request.form.get('ETT')
-    FA = request.form.get('FA')
-    JAVA = request.form.get('JAVA')
-    NSM = request.form.get('NSM')
-    print(ETT, FA, JAVA, NSM)
-    msg = "Submitted"
-    return render_template('unit.html', portal=portal, msg=msg),  jsonify({'message': 'Data received successfully'})
+    user_id = session.get('user_id')
+    current_unit = 1
+
+    if request.method == 'POST':
+        ETT = request.form.get('ETT')
+        FA = request.form.get('FA')
+        JAVA = request.form.get('JAVA')
+        NSM = request.form.get('NSM')
+        status = 1
+        user_id = session.get('user_id')  
+
+        cursor.execute('SELECT status FROM unit_marks WHERE user_id = %s', (user_id,))
+        result = cursor.fetchone()
+
+        if result:
+            status = result[0]
+            print("Existing status:", status)
+        else:
+            status = 1
+            print("No existing status found.")
+            cursor.execute('INSERT INTO unit_marks (user_id, subject_1, subject_2, subject_3, subject_4, current_unit, status) VALUES (%s, %s, %s, %s, %s, %s, %s)', (user_id, ETT, FA, JAVA, NSM, current_unit, status))
+            mysql.connection.commit()
+            return jsonify({'message': 'Data received successfully'})
+    
+    return render_template('unit.html', portal=portal)
 
 if __name__ == '__main__':
     app.run(debug=True)

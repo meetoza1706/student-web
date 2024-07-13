@@ -27,19 +27,19 @@
             <form class="flex flex-col justify-center items-center bg-white p-3">
                 <div class="w-full mb-6">
                     <label for="unit-1" class="block mb-2 text-blue-500">ETT</label>
-                    <input type="text" id="unit-1" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
+                    <input type="number" required id="unit-1" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
                 </div>
                 <div class="w-full mb-6">
                     <label for="unit-2" class="block mb-2 text-blue-500">FA</label>
-                    <input type="text" id="unit-2" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
+                    <input type="number" required id="unit-2" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
                 </div>
                 <div class="w-full mb-6">
                     <label for="unit-3" class="block mb-2 text-blue-500">JAVA</label>
-                    <input type="text" id="unit-3" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
+                    <input type="number" required id="unit-3" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
                 </div>
                 <div class="w-full mb-6">
                     <label for="unit-4" class="block mb-2 text-blue-500">NSM</label>
-                    <input type="text" id="unit-4" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
+                    <input type="number" required id="unit-4" class="w-full p-2 text-blue-700 border-b-2 border-blue-500 outline-none focus:bg-gray-300">
                 </div>
             </form>
             <!-- Submit button triggers the Ajax request -->
@@ -67,7 +67,7 @@
                     },
                     success: function(data) {
                         // Update message
-                        document.getElementById('msg').textContent = "Submitted";
+                        document.getElementById('msg').textContent = "Marks Submitted!";
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         console.error("Error:", textStatus, errorThrown);
