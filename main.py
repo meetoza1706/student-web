@@ -682,14 +682,20 @@ def XA():
     return render_template('XA.html')
 
 
-@app.route('/unit_test')
+@app.route('/unit_test', methods=['POST','GET'])
 def unit_test():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT unit_status FROM admin')
     account = cursor.fetchone()
     portal = account[0]
     print(portal)
-    return render_template('unit.html', portal=portal)
+    ETT = request.form.get('ETT')
+    FA = request.form.get('FA')
+    JAVA = request.form.get('JAVA')
+    NSM = request.form.get('NSM')
+    print(ETT, FA, JAVA, NSM)
+    msg = "Submitted"
+    return render_template('unit.html', portal=portal, msg=msg),  jsonify({'message': 'Data received successfully'})
 
 if __name__ == '__main__':
     app.run(debug=True)
