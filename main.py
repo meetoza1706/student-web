@@ -12,6 +12,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import bcrypt
 from flask_bcrypt import Bcrypt
+from apscheduler.schedulers.background import BackgroundScheduler
 
 app = Flask(__name__)
 app.secret_key = 'meet'
@@ -114,6 +115,22 @@ def get_current_lecture_and_class(schedule):
         timing = "Enjoy your off time :)"
 
     return current_lecture, current_class, timing
+
+def check_user():
+    now = datetime.now()
+    target_time = now.replace(hour=18, minute=20, second=00, microsecond=0)
+    if now >= target_time:
+        
+        user_exists = True  # Replace with actual user existence check
+        if not user_exists:
+            # Insert 4 to the absent button (replace with actual logic)
+            print("User is absent. Inserting 4 to absent button.")
+        else:
+            print("User is present.")
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(check_user, 'cron', hour=18, minute=20)
+scheduler.start()
 
 @app.route('/')
 def home():
@@ -678,6 +695,8 @@ def XA():
 
 @app.route('/unit_test', methods=['POST', 'GET'])
 def unit_test():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT unit_status FROM admin')
     account = cursor.fetchone()
