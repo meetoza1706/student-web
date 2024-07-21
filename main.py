@@ -25,6 +25,7 @@ OUTLOOK_PASSWORD = 'Studentweb@2420'
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
+scheduler = BackgroundScheduler()
 
 # MySQL configurations
 app.config['MYSQL_HOST'] = 'localhost'
@@ -118,19 +119,47 @@ def get_current_lecture_and_class(schedule):
 
 def check_user():
     now = datetime.now()
-    target_time = now.replace(hour=18, minute=20, second=00, microsecond=0)
+    target_time = now.replace(hour=19, minute=30, second=0, microsecond=0)
+    
     if now >= target_time:
-        
-        user_exists = True  # Replace with actual user existence check
-        if not user_exists:
-            # Insert 4 to the absent button (replace with actual logic)
-            print("User is absent. Inserting 4 to absent button.")
-        else:
-            print("User is present.")
+        with app.app_context():
+            cursor = mysql.connection.cursor()
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(check_user, 'cron', hour=18, minute=20)
-scheduler.start()
+            # Fetch all user IDs
+            cursor.execute('SELECT user_id FROM user_data')
+            user_ids = [row[0] for row in cursor.fetchall()]
+
+            # Get today's date
+            today = datetime.now().strftime('%Y-%m-%d')
+
+            # Fetch user IDs present today
+            cursor.execute('SELECT DISTINCT user_id FROM attendance WHERE DATE(time) = %s', (today,))
+            present_user_ids = {row[0] for row in cursor.fetchall()}
+
+            # Find user IDs not present today
+            missing_user_ids = set(user_ids) - present_user_ids
+
+            # Print the list of missing user IDs
+            print(f"Missing user IDs: {missing_user_ids}")
+
+            if missing_user_ids:
+                for i in missing_user_ids:
+                    today = date.today()
+                    attendance = 0
+                    absent = 4
+                    late = 0
+                    PB_status = 0
+                    LB_status = 0
+                    cursor.execute('INSERT INTO attendance (day, present_lectures, absent_lectures, late_lectures, PB_status, LB_status, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)', 
+                (today, attendance, absent, late, PB_status, LB_status, i))
+                    mysql.connection.commit()
+                print("Users are marked absent.")
+            else:
+                print("Users are present.")
+            cursor.close()
+
+# Schedule the job to run daily at 18:41
+scheduler.add_job(check_user, 'cron', hour=19, minute=30)
 
 @app.route('/')
 def home():
@@ -728,4 +757,5 @@ def unit_test():
     return render_template('unit.html', portal=portal)
 
 if __name__ == '__main__':
+    scheduler.start()
     app.run(debug=True)
