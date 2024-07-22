@@ -1,2 +1,4 @@
+from datetime import date
 
-    print(portal)
+day_name = date.today().strftime('%A')
+print(day_name)
