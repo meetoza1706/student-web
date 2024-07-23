@@ -455,11 +455,11 @@ def verify_password(plain_password, hashed_password):
 def login():
     msg = ''
     if request.method == 'POST':
-        username = request.form['username']
+        auth = request.form['username'] # username or email
         password = request.form['password']
         
         cursor = mysql.connection.cursor()
-        cursor.execute('SELECT user_id, username, password FROM user_data WHERE username = %s', (username,))
+        cursor.execute('SELECT user_id, username, password FROM user_data WHERE username = %s OR email = %s', (auth,auth,))
         account = cursor.fetchone()
         
         if account:

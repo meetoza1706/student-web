@@ -1,90 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Lectures Attendance</title>
-  <!-- Tailwind CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <!-- ApexCharts -->
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Photo Cropper</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.0.0/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <style>
+        #cropper-container img {
+            max-height: 500px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .cropper-view-box,
+        .cropper-face {
+            border-radius: 50%; /* Make cropper area circle */
+        }
+    </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center h-screen">
-  <div class="bg-white shadow-md rounded-lg p-8 max-w-lg w-full">
-    <h2 class="text-lg font-bold mb-4 text-center">Lectures Attendance</h2>
-    <div id="chart" class="w-full h-96"></div>
-  </div>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
 
-  <script>
-    // Global variable for total lectures
-    var total_lectures = 30; // Change this value as needed
+    <!-- File Input -->
+    <input type="file" id="fileInput" accept="image/*" class="hidden">
 
-    // Example data for lectures attended, absent, and late
-    var present_lectures = 20;
-    var absent_lectures = 5;
-    var late_lectures = 5;
+    <!-- Profile Image -->
+    <div class="w-32 h-32 rounded-full overflow-hidden bg-gray-300">
+        <img id="profileImage" src="https://via.placeholder.com/150" alt="Profile Image" class="w-full h-full object-cover">
+    </div>
 
-    var options = {
-      series: [{
-        name: 'Lectures',
-        data: [present_lectures, absent_lectures, late_lectures]
-      }],
-      chart: {
-        height: 350,
-        type: 'bar',
-        toolbar: {
-          show: false
-        }
-      },
-      plotOptions: {
-        bar: {
-          horizontal: true,
-          borderRadius: 4,
-          dataLabels: {
-            position: 'center', // Center-align the data labels
-          },
-        },
-      },
-      dataLabels: {
-        enabled: true,
-        style: {
-          fontSize: '12px',
-          colors: ['#304758']
-        }
-      },
-      xaxis: {
-        categories: ['Present Lectures', 'Absent Lectures', 'Late Lectures'],
-        labels: {
-          style: {
-            fontSize: '14px'
-          }
-        }
-      },
-      yaxis: {
-        labels: {
-          style: {
-            fontSize: '12px'
-          }
-        }
-      },
-      title: {
-        text: 'Attendance Overview',
-        align: 'center',
-        margin: 10,
-        offsetX: 0,
-        offsetY: 0,
-        floating: false,
-        style: {
-          fontSize: '16px',
-          fontWeight: 'bold',
-          color: '#263238',
-          textAlign: 'center' // Center align the title text
-        },
-      }
-    };
+    <!-- Button to Open Modal -->
+    <button id="openModalButton" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Change Profile Photo</button>
 
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-    chart.render();
-  </script>
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+        <div class="bg-white p-4 rounded-lg shadow-lg w-96">
+
+            <!-- Cropper Container -->
+            <div id="cropper-container" class="mb-4">
+                <img id="image" src="" alt="Image">
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end">
+                <button id="cropButton" class="mr-2 px-4 py-2 bg-green-500 text-white rounded">Crop</button>
+                <button id="closeModalButton" class="px-4 py-2 bg-red-500 text-white rounded">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    <script>
+        // Get elements
+        const fileInput = document.getElementById('fileInput');
+        const openModalButton = document.getElementById('openModalButton');
+        const modal = document.getElementById('modal');
+        const closeModalButton = document.getElementById('closeModalButton');
+        const image = document.getElementById('image');
+        const profileImage = document.getElementById('profileImage');
+        const cropButton = document.getElementById('cropButton');
+
+        let cropper;
+
+        // Open file input when button is clicked
+        openModalButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Show modal with cropper when image is selected
+        fileInput.addEventListener('change', (event) => {
+            const files = event.target.files;
+            if (files && files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    image.src = reader.result;
+                    modal.classList.remove('hidden');
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+                    cropper = new Cropper(image, {
+                        aspectRatio: 1, // Maintain a square aspect ratio
+                        viewMode: 1,
+                        ready: function () {
+                            // Custom CropperJS Crop Area
+                            const cropBoxData = cropper.getCropBoxData();
+                            const containerData = cropper.getContainerData();
+                            const cropBoxSize = Math.min(containerData.width, containerData.height);
+                            
+                            cropper.setCropBoxData({
+                                left: (containerData.width - cropBoxSize) / 2,
+                                top: (containerData.height - cropBoxSize) / 2,
+                                width: cropBoxSize,
+                                height: cropBoxSize
+                            });
+                        }
+                    });
+                };
+                reader.readAsDataURL(files[0]);
+            }
+        });
+
+        // Crop image and update profile image
+        cropButton.addEventListener('click', () => {
+            const canvas = cropper.getCroppedCanvas({
+                width: 200, // Set desired output image dimensions
+                height: 200,
+                fillColor: '#fff' // Optional: Set background color if needed
+            });
+            profileImage.src = canvas.toDataURL();
+            modal.classList.add('hidden');
+        });
+
+        // Close modal
+        closeModalButton.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+    </script>
 </body>
 </html>
