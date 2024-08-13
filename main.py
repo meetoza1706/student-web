@@ -760,6 +760,9 @@ def unit_test():
     
     return render_template('unit.html', portal=portal)
 
+@app.route('/test')
+def test():
+    return render_template('test.html')
 if __name__ == '__main__':
     scheduler.start()
     app.run(debug=True)

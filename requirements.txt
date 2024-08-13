@@ -1,0 +1,9 @@
+Flask
+Gunicorn
+Werkzeug.utils
+sqlalchemy
+email.mime.orm
+email.mime.text
+bcrypt
+flask_bcrypt
+apscheduler.schedulers.background
